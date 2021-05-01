@@ -9,7 +9,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { getUserInfo, logout } from '../services'
+import { logout, getUserInfo, getActivities } from '../services'
 
 export default {
   name: 'Profile',
@@ -19,6 +19,11 @@ export default {
       .then((res) => {
         console.log(res)
         store.dispatch('storeUser', res)
+      })
+      .catch((error) => console.log(error))
+    getActivities(200)
+      .then((res) => {
+        console.log(res)
       })
       .catch((error) => console.log(error))
     return {

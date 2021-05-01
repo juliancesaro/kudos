@@ -63,3 +63,20 @@ export const getUserInfo = async () => {
     console.log(error)
   }
 }
+
+export const getActivities = async (num) => {
+  try {
+    const userInfoResponse = await axios.get(
+      'https://www.strava.com/api/v3/athlete/activities',
+      {
+        params: {
+            page: 1, 
+            per_page: num, 
+        }
+      }
+    )
+    return userInfoResponse.data
+  } catch (error) {
+    console.log(error)
+  }
+}
