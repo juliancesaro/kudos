@@ -1,8 +1,11 @@
-<template>
-  <div v-if="user" class="profile">
-    <h1>Hi, {{ user.firstname + ' ' + user.lastname }}</h1>
-    <img :src="user.profile" />
-    <button @click="logout">Logout</button>
+<template
+  ><div class="profile-wrapper">
+    <div v-if="user" class="profile">
+      <h1>Hi, {{ user.firstname + ' ' + user.lastname }}</h1>
+      <img :src="user.profile" />
+      <button @click="logout">Logout</button>
+    </div>
+    <div class="map" ref="map"></div>
   </div>
 </template>
 
@@ -21,7 +24,7 @@ export default {
         store.dispatch('storeUser', res)
       })
       .catch((error) => console.log(error))
-    getActivities(200)
+    getActivities(10)
       .then((res) => {
         console.log(res)
       })
@@ -30,11 +33,23 @@ export default {
       user: computed(() => store.state.user),
     }
   },
+  data() {
+    return {
+      map: null,
+    }
+  },
   methods: {
     logout() {
       this.$store.dispatch('removeToken')
       logout()
     },
+  },
+  mounted() {
+    console.log(this.$refs.map)
+    this.map = new window.google.maps.Map(this.$refs['map'], {
+      center: { lat: -25.344, lng: 131.036 },
+      zoom: 4,
+    })
   },
 }
 </script>
@@ -49,5 +64,8 @@ img {
 }
 button {
   display: block;
+}
+.map {
+  height: 600px;
 }
 </style>
