@@ -13,7 +13,12 @@ export const store = createStore({
   },
   actions: {
     storeToken({ commit }, token) {
+      window.localStorage.setItem('stravaAccessToken', token)
       commit('storeToken', token)
+    },
+    removeToken({ commit }) {
+      window.localStorage.removeItem('stravaAccessToken')
+      commit('storeToken', null)
     },
   },
   getters: {

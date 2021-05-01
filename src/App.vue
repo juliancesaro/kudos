@@ -1,17 +1,26 @@
 <template>
-  <Login />
+  <Login v-if="!loggedIn" />
+  <Profile v-else />
 </template>
 
 <script>
 import Login from './pages/Login.vue'
+import Profile from './pages/Profile.vue'
 import { getAccessToken } from './utils'
 export default {
   name: 'App',
   components: {
     Login,
+    Profile,
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.getters.accessToken
+    },
   },
   mounted() {
-    getAccessToken()
+    const token = getAccessToken()
+    token ? this.$store.dispatch('storeToken', token) : null
   },
 }
 </script>
