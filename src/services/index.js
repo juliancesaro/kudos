@@ -108,13 +108,13 @@ export const getUserInfo = async () => {
   }
 }
 
-export const getActivities = async (num) => {
+export const getActivities = async (page, num) => {
   try {
     const userInfoResponse = await axios.get(
       'https://www.strava.com/api/v3/athlete/activities',
       {
         params: {
-          page: 1,
+          page: page,
           per_page: num,
         },
       }

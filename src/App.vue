@@ -34,7 +34,6 @@ export default {
   },
 }
 </script>
-
 <style>
 @font-face {
   font-family: 'MaisonNeue';
@@ -56,12 +55,20 @@ export default {
   src: local('MaisonNeue-Light'),
     url(./fonts/MaisonNeue/MaisonNeue-Light.ttf) format('truetype');
 }
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
 #app {
   font-family: MaisonNeue-Book, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  width: 100%;
+  background-color: #efefef;
 }
 </style>

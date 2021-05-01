@@ -31,6 +31,7 @@ export default {
     return {
       map: null,
       latLngArray: [],
+      activitiesPagination: 0,
     }
   },
   methods: {
@@ -65,26 +66,30 @@ export default {
     },
     buildHeatMap() {
       let heatMapData = []
-      console.log(this.latLngArray)
       this.latLngArray.forEach((coords) => {
         heatMapData.push(new window.google.maps.LatLng(coords[0], coords[1]))
       })
       var heatmap = new window.google.maps.visualization.HeatmapLayer({
         data: heatMapData,
-        maxIntensity: 30,
+        maxIntensity: 50,
         opacity: 1,
       })
       heatmap.setMap(this.map)
     },
   },
   mounted() {
-    this.map = new window.google.maps.Map(this.$refs['map'], {
-      center: { lat: -33.8419, lng: 151.1478 },
-      zoom: 12,
-    })
-    getActivities(200)
+    try {
+      this.map = new window.google.maps.Map(this.$refs['map'], {
+        center: { lat: -33.8419, lng: 151.1478 },
+        zoom: 12,
+      })
+    } catch (e) {
+      console.log(e)
+      alert('You must enable cache for Google Maps')
+    }
+    getActivities(this.activitiesPagination, 200)
       .then((res) => {
-        this.$store.dispatch('storeActivities', res)
+        if (res) this.$store.dispatch('storeActivities', res)
         this.createLatLngArray(res)
       })
       .catch((error) => console.log(error))
@@ -99,11 +104,16 @@ h1 {
 }
 img {
   border-radius: 50%;
+  -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+  box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
 }
 button {
   display: block;
+  margin: 0 auto;
 }
 .map {
   height: 600px;
+  width: 50%;
+  margin: 0 auto;
 }
 </style>
