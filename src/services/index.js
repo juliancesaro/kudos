@@ -1,31 +1,76 @@
 import axios from 'axios'
 import { getAuthTokenFromUrl } from '../utils'
+const { VUE_APP_CLIENT_ID, VUE_APP_CLIENT_SECRET } = process.env
 
-const localAccessToken = window.localStorage.getItem('strava_access_token')
+const getLocalAccessToken = () =>
+  window.localStorage.getItem('strava_access_token')
+const getLocalRefreshToken = () =>
+  window.localStorage.getItem('strava_refresh_token')
+const getLocalTokenExpiry = () =>
+  window.localStorage.getItem('strava_token_expiry')
 
 const setLocalAccessToken = (token) =>
   window.localStorage.setItem('strava_access_token', token)
-const removeLocalAccessToken = () =>
-  window.localStorage.removeItem('strava_access_token')
-
 const setLocalRefreshToken = (token) =>
   window.localStorage.setItem('strava_refresh_token', token)
-const removeLocalRefreshToken = () =>
-  window.localStorage.removeItem('strava_refresh_token')
-
 const setLocalTokenExpiry = (token) =>
   window.localStorage.setItem('strava_token_expiry', token)
+
+const removeLocalAccessToken = () =>
+  window.localStorage.removeItem('strava_access_token')
+const removeLocalRefreshToken = () =>
+  window.localStorage.removeItem('strava_refresh_token')
 const removeLocalTokenExpiry = () =>
   window.localStorage.removeItem('strava_token_expiry')
 
+const refreshAccessToken = async () => {
+  try {
+    const authReponse = await axios.post(
+      `https://www.strava.com/api/v3/oauth/token`,
+      null,
+      {
+        params: {
+          client_id: VUE_APP_CLIENT_ID,
+          client_secret: VUE_APP_CLIENT_SECRET,
+          grant_type: 'refresh_token',
+          refresh_token: getLocalRefreshToken(),
+        },
+      }
+    )
+    const responseData = authReponse.data
+    setLocalAccessToken(responseData.access_token)
+    setLocalRefreshToken(responseData.refresh_token)
+    setLocalTokenExpiry(responseData.expires_at)
+    window.location.reload()
+    return
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const getAccessToken = async () => {
   let token = getAuthTokenFromUrl()
+  const localTokenExpiry = getLocalTokenExpiry()
+
+  if (localTokenExpiry && Number(localTokenExpiry * 1000) - Date.now() <= 0) {
+    refreshAccessToken()
+  }
+
+  const localAccessToken = getLocalAccessToken()
 
   if (!localAccessToken && token) {
-    const { VUE_APP_CLIENT_ID, VUE_APP_CLIENT_SECRET } = process.env
     try {
       const authReponse = await axios.post(
-        `https://www.strava.com/api/v3/oauth/token?client_id=${VUE_APP_CLIENT_ID}&client_secret=${VUE_APP_CLIENT_SECRET}&code=${token}&grant_type=authorization_code`
+        `https://www.strava.com/api/v3/oauth/token`,
+        null,
+        {
+          params: {
+            client_id: VUE_APP_CLIENT_ID,
+            client_secret: VUE_APP_CLIENT_SECRET,
+            code: token,
+            grant_type: 'authorization_code',
+          },
+        }
       )
       const responseData = authReponse.data
       axios.defaults.headers.common[
@@ -40,7 +85,6 @@ export const getAccessToken = async () => {
       console.log(error)
     }
   }
-
   axios.defaults.headers.common['Authorization'] = `Bearer ${localAccessToken}`
   return localAccessToken
 }
@@ -70,9 +114,9 @@ export const getActivities = async (num) => {
       'https://www.strava.com/api/v3/athlete/activities',
       {
         params: {
-            page: 1, 
-            per_page: num, 
-        }
+          page: 1,
+          per_page: num,
+        },
       }
     )
     return userInfoResponse.data

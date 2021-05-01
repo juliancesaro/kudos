@@ -20,13 +20,7 @@ export default {
     const store = useStore()
     getUserInfo()
       .then((res) => {
-        console.log(res)
         store.dispatch('storeUser', res)
-      })
-      .catch((error) => console.log(error))
-    getActivities(10)
-      .then((res) => {
-        console.log(res)
       })
       .catch((error) => console.log(error))
     return {
@@ -43,13 +37,32 @@ export default {
       this.$store.dispatch('removeToken')
       logout()
     },
+    showRoute(polyline) {
+      const flightPath = new window.google.maps.Polyline({
+        path: window.google.maps.geometry.encoding.decodePath(polyline),
+        geodesic: true,
+        strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        strokeOpacity: 1.0,
+        strokeWeight: 5,
+      })
+      flightPath.setMap(this.map)
+    },
   },
   mounted() {
-    console.log(this.$refs.map)
     this.map = new window.google.maps.Map(this.$refs['map'], {
       center: { lat: -25.344, lng: 131.036 },
       zoom: 4,
     })
+    getActivities(200)
+      .then((res) => {
+        this.$store.dispatch('storeActivities', res)
+        res.forEach((route) => {
+          route.map.summary_polyline
+            ? this.showRoute(route.map.summary_polyline)
+            : null
+        })
+      })
+      .catch((error) => console.log(error))
   },
 }
 </script>
