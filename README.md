@@ -1,6 +1,6 @@
 # kudos
 
-A web app for visualizing strava data
+A web app for visualizing Strava data
 
 ## Project setup
 
