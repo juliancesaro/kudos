@@ -4,26 +4,37 @@ export const store = createStore({
   state() {
     return {
       accessToken: null,
+      user: null,
     }
   },
   mutations: {
     storeToken(state, token) {
       state.accessToken = token
     },
+    storeUser(state, user) {
+      state.user = user
+    },
   },
   actions: {
     storeToken({ commit }, token) {
-      window.localStorage.setItem('stravaAccessToken', token)
       commit('storeToken', token)
     },
     removeToken({ commit }) {
-      window.localStorage.removeItem('stravaAccessToken')
       commit('storeToken', null)
+    },
+    storeUser({ commit }, user) {
+      commit('storeUser', user)
+    },
+    removeUser({ commit }) {
+      commit('storeUser', null)
     },
   },
   getters: {
-    accessToken: (state) => {
-      return state.accessToken
-    },
+    // accessToken: (state) => {
+    //   return state.accessToken
+    // },
+    // user: (state) => {
+    //   return state.user
+    // },
   },
 })
