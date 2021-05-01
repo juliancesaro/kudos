@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       map: null,
+      latLngArray: [],
     }
   },
   methods: {
@@ -37,30 +38,54 @@ export default {
       this.$store.dispatch('removeToken')
       logout()
     },
-    showRoute(polyline) {
-      const flightPath = new window.google.maps.Polyline({
+    createLatLngArray(activities) {
+      activities.forEach((activity) => {
+        activity.map.summary_polyline
+          ? (this.latLngArray = [
+              ...this.latLngArray,
+              ...this.buildPath(activity.map.summary_polyline),
+            ])
+          : null
+      })
+      this.buildHeatMap()
+    },
+    buildPath(polyline) {
+      let latLngArr = []
+      const activityPath = new window.google.maps.Polyline({
         path: window.google.maps.geometry.encoding.decodePath(polyline),
         geodesic: true,
         strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
         strokeOpacity: 1.0,
         strokeWeight: 5,
       })
-      flightPath.setMap(this.map)
+      activityPath.latLngs.Nb[0].Nb.forEach((coords) => {
+        latLngArr.push([coords.lat(), coords.lng()])
+      })
+      return latLngArr
+    },
+    buildHeatMap() {
+      let heatMapData = []
+      console.log(this.latLngArray)
+      this.latLngArray.forEach((coords) => {
+        heatMapData.push(new window.google.maps.LatLng(coords[0], coords[1]))
+      })
+      var heatmap = new window.google.maps.visualization.HeatmapLayer({
+        data: heatMapData,
+        maxIntensity: 30,
+        opacity: 1,
+      })
+      heatmap.setMap(this.map)
     },
   },
   mounted() {
     this.map = new window.google.maps.Map(this.$refs['map'], {
-      center: { lat: -25.344, lng: 131.036 },
-      zoom: 4,
+      center: { lat: -33.8419, lng: 151.1478 },
+      zoom: 12,
     })
     getActivities(200)
       .then((res) => {
         this.$store.dispatch('storeActivities', res)
-        res.forEach((route) => {
-          route.map.summary_polyline
-            ? this.showRoute(route.map.summary_polyline)
-            : null
-        })
+        this.createLatLngArray(res)
       })
       .catch((error) => console.log(error))
   },
