@@ -1,5 +1,7 @@
 # kudos
 
+A web app for visualizing strava data
+
 ## Project setup
 
 ```
