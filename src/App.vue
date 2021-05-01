@@ -1,5 +1,6 @@
 <template>
-  <Login v-if="!loggedIn()" />
+  <div v-if="loading"></div>
+  <Login v-else-if="!loggedIn()" />
   <Profile v-else />
 </template>
 
@@ -13,12 +14,20 @@ export default {
     Login,
     Profile,
   },
+  data() {
+    return {
+      loading: false,
+    }
+  },
   methods: {
     loggedIn() {
       return this.$store.state.accessToken
     },
   },
   mounted() {
+    if (window.location.pathname === '/exchange_token') {
+      this.loading = true
+    }
     getAccessToken().then((res) => {
       this.$store.dispatch('storeToken', res)
     })
