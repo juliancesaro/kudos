@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <router-link class="navlink" active-class="active" to="/profile"
+    <router-link class="navlink" active-class="active" to="/"
       ><svg
         xmlns="http://www.w3.org/2000/svg"
         class="icon icon-tabler icon-tabler-user"

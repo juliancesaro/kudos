@@ -79,7 +79,10 @@ export const getAccessToken = async () => {
       setLocalAccessToken(responseData.access_token)
       setLocalRefreshToken(responseData.refresh_token)
       setLocalTokenExpiry(responseData.expires_at)
-      window.location = `http://localhost:8080/`
+      window.location =
+        process.env.NODE_ENV === 'production'
+          ? 'https://kudos-web.herokuapp.com/'
+          : `http://localhost:8080/`
       return responseData.access_token
     } catch (error) {
       console.log(error)
@@ -94,7 +97,10 @@ export const logout = () => {
   removeLocalAccessToken()
   removeLocalRefreshToken()
   removeLocalTokenExpiry()
-  window.location = `http://localhost:8080/`
+  window.location =
+    process.env.NODE_ENV === 'production'
+      ? 'https://kudos-web.herokuapp.com'
+      : `http://localhost:8080`
 }
 
 export const getUserInfo = async () => {

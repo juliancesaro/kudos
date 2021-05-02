@@ -7,7 +7,7 @@ const router = createRouter({
   history,
   routes: [
     {
-      path: '/profile',
+      path: '/',
       component: Profile,
     },
     {
