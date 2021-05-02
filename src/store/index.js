@@ -6,6 +6,7 @@ export const store = createStore({
       accessToken: null,
       user: null,
       activities: null,
+      recentActivities: null,
     }
   },
   mutations: {
@@ -17,6 +18,9 @@ export const store = createStore({
     },
     storeActivities(state, activities) {
       state.activities = activities
+    },
+    storeRecentActivities(state, activities) {
+      state.recentActivities = activities
     },
   },
   actions: {
@@ -36,15 +40,13 @@ export const store = createStore({
       commit('storeActivities', activities)
     },
     removeActivities({ commit }) {
-      commit('storeUser', null)
+      commit('storeActivities', null)
     },
-  },
-  getters: {
-    // accessToken: (state) => {
-    //   return state.accessToken
-    // },
-    // user: (state) => {
-    //   return state.user
-    // },
+    storeRecentActivities({ commit }, activities) {
+      commit('storeRecentActivities', activities)
+    },
+    removeRecentActivities({ commit }) {
+      commit('storeRecentActivities', null)
+    },
   },
 })

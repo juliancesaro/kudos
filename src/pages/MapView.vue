@@ -124,6 +124,10 @@ export default {
 <style scoped>
 .mapview-wrapper {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .map-nav {
   display: flex;
@@ -145,10 +149,19 @@ export default {
 @media only screen and (min-width: 751px) {
   .mapview-wrapper {
     height: 100%;
-    margin-left: 130px;
+    margin-left: 110px;
   }
   .map-nav {
     width: 50%;
+    margin: 0 auto;
+  }
+  .map-nav > button {
+    width: 50%;
+    height: 40px;
+    border: none;
+    font-weight: 500;
+    background-color: #efefef;
+    border: 1px solid rgb(179, 177, 177);
   }
   .map {
     height: 600px;

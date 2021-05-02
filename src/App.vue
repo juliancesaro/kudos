@@ -36,9 +36,13 @@ export default {
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
+* {
+  box-sizing: border-box;
+}
 html,
 body,
 #app {
+  width: 100%;
   height: 100%;
   margin: 0;
   overflow-x: hidden;
@@ -50,6 +54,7 @@ body,
   text-align: center;
   color: #2c3e50;
   width: 100%;
+  min-width: 220px;
   background-color: #efefef;
 }
 button {

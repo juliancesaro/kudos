@@ -19,7 +19,9 @@ export default {
         process.env.NODE_ENV === 'production'
           ? 'https://kudos-web.herokuapp.com'
           : 'http://localhost:8080'
-      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,activity:read`
+      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,activity:read,profile:read_all
+
+`
     },
   },
 }

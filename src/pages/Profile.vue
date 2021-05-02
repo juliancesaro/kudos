@@ -1,9 +1,32 @@
-<template
-  ><div class="profile-wrapper">
+<template>
+  <div class="profile-wrapper">
     <div v-if="user" class="profile">
-      <h1>Hi, {{ user.firstname + ' ' + user.lastname }}</h1>
-      <img :src="user.profile" />
-      <button @click="logout">Logout</button>
+      <div class="profile-header">
+        <img :src="user.profile" />
+        <h1>{{ user.firstname + ' ' + user.lastname }}</h1>
+        <p>{{ user.bio }}</p>
+        <div class="profile-info">
+          <div class="follower-count">
+            {{ user.follower_count }}
+            <p>Followers</p>
+          </div>
+          <div class="friend-count">
+            {{ user.friend_count }}
+            <p>Following</p>
+          </div>
+        </div>
+        <button @click="logout">Logout</button>
+      </div>
+      <div class="profile-recent">
+        <h2>Your recent activities</h2>
+        <div class="recent-activities">
+          <activity-card
+            v-for="activity in recentActivities"
+            :activity="activity"
+            :key="activity.id"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -11,10 +34,14 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { logout, getUserInfo } from '../services'
+import { logout, getUserInfo, getActivities } from '../services'
+import ActivityCard from '../components/ActivityCard.vue'
 
 export default {
   name: 'Profile',
+  components: {
+    ActivityCard,
+  },
   setup() {
     const store = useStore()
     if (!store.state.user) {
@@ -24,8 +51,17 @@ export default {
         })
         .catch((error) => console.log(error))
     }
+    if (!store.state.recentActivities) {
+      getActivities(1, 5)
+        .then((res) => {
+          console.log(res)
+          store.dispatch('storeRecentActivities', res)
+        })
+        .catch((error) => console.log(error))
+    }
     return {
       user: computed(() => store.state.user),
+      recentActivities: computed(() => store.state.recentActivities),
     }
   },
   data() {
@@ -46,36 +82,111 @@ export default {
 
 <style scoped>
 .profile-wrapper {
-  height: 100%;
+  min-width: 220px;
 }
-@media only screen and (min-width: 751px) {
+.profile-header {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.profile-header > p {
+  margin-top: 0;
+}
+.profile-info {
+  display: flex;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.profile-info > div {
+  width: 50%;
+  font-weight: 700;
+  font-size: 30px;
+  color: #fc4c02;
+}
+.profile-info > div > p {
+  font-weight: 500;
+  font-size: 16px;
+  color: rgb(70, 70, 70);
+  margin-top: 5px;
+}
+h2 {
+  margin: 0 auto 30px auto;
+  font-size: 20px;
+  font-weight: 500;
+}
+@media only screen and (min-width: 750px) {
   .profile-wrapper {
-    height: 100%;
-    margin-left: 130px;
+    margin-left: 110px;
+    padding: 0 25px;
+  }
+  .profile-header {
+    margin: 0 auto 30px auto;
+  }
+  img {
+    margin-top: 30px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+    box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+  }
+  h1 {
+    margin: 0;
+    padding: 20px 0;
+    color: #000;
+    font-family: 'Montserrat', sans-serif;
+  }
+  button {
+    background-color: #fc4c02;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: 500;
+    padding: 10px 30px;
+    display: block;
+    margin: 10px auto;
+  }
+  .profile-recent {
+    max-width: 600px;
+    margin: 0 auto;
   }
 }
 @media only screen and (max-width: 750px) {
+  .profile-wrapper {
+    padding: 0 25px;
+  }
+  .profile-header {
+    margin: 0 40px 30px 40px;
+  }
+  img {
+    margin-top: 30px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+    box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+  }
+  h1 {
+    margin: 0;
+    padding: 20px 0;
+    color: black;
+    font-family: 'Montserrat', sans-serif;
+  }
+  button {
+    background-color: #fc4c02;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: 600;
+    padding: 10px 30px;
+    display: block;
+    margin: 10px auto 0 auto;
+  }
+  .profile-recent {
+    margin-bottom: 100px;
+  }
 }
-h1 {
-  margin: 0;
-  padding: 20px 0;
-  color: #fc4c02;
-  font-family: 'Montserrat', sans-serif;
-}
-img {
-  margin-top: 20px;
-  border-radius: 50%;
-  -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-  box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-}
-button {
-  background-color: #fc4c02;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  font-weight: 500;
-  padding: 10px 30px;
-  display: block;
-  margin: 50px auto;
+@media only screen and (max-width: 400px) {
+  .profile-wrapper {
+    padding: 0 25px;
+  }
+  .profile-header {
+    margin: 0 20px 30px 20px;
+  }
 }
 </style>
