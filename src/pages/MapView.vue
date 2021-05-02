@@ -58,6 +58,7 @@ export default {
       map: null,
       latLngArray: [],
       polylineArray: [],
+      markersArray: [],
       heatmap: null,
       mapView: 'heat',
       modalOpen: null,
@@ -70,6 +71,10 @@ export default {
     },
     closeModal(mapData) {
       if (mapData) {
+        this.polylineArray = []
+        this.latLngArray = []
+        this.activityNames = []
+        this.markersArray = []
         this.$store.dispatch('storeMapData', mapData)
         this.loadMap()
       }
@@ -88,6 +93,7 @@ export default {
         label: `${i + 1}`,
         optimized: false,
       })
+      this.markersArray.push((map) => marker.setMap(map))
       marker.setMap(this.map)
       // Add a click listener for each marker, and set up the info window.
       marker.addListener('click', () => {
@@ -109,6 +115,9 @@ export default {
           for (let i = 0; i < this.polylineArray.length; i++) {
             this.polylineArray[i].removePoly()
           }
+          for (let i = 0; i < this.markersArray.length; i++) {
+            this.markersArray[i](null)
+          }
           this.heatmap.setMap(this.map)
         }
       }
@@ -123,7 +132,11 @@ export default {
       getActivities(beforeDate, numActivities)
         .then((res) => {
           try {
-            res.forEach((activity) => this.activityNames.push(activity.name))
+            res.forEach((activity) =>
+              activity.map.summary_polyline
+                ? this.activityNames.push(activity.name)
+                : null
+            )
             this.map = new window.google.maps.Map(this.$refs['map'], {
               center: {
                 lat: res[0].start_latlng[0],
@@ -244,6 +257,7 @@ export default {
   padding: 0;
   border: none;
   cursor: pointer;
+  background-color: #efefef;
 }
 @media only screen and (min-width: 751px) {
   .mapview-wrapper {

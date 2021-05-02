@@ -28,7 +28,16 @@
         />
       </div>
       <button
-        :class="`save-btn${beforeDate === null ? ' disabled' : ' active'}`"
+        :class="
+          `save-btn${
+            beforeDate === null ||
+            numActivities === '' ||
+            numActivities > 200 ||
+            numActivities < 1
+              ? ' disabled'
+              : ' active'
+          }`
+        "
         @click="save"
       >
         Save
