@@ -58,7 +58,6 @@ export default {
       const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
       getActivities(utcSecondsSinceEpoch, 5)
         .then((res) => {
-          console.log(res)
           store.dispatch('storeRecentActivities', res)
         })
         .catch((error) => console.log(error))

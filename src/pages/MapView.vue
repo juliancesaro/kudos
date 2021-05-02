@@ -54,6 +54,7 @@ export default {
   },
   data() {
     return {
+      activityNames: [],
       map: null,
       latLngArray: [],
       polylineArray: [],
@@ -74,14 +75,33 @@ export default {
       }
       this.modalOpen = false
     },
+    addMarker(name, i) {
+      const infoWindow = new window.google.maps.InfoWindow()
+      // Create the markers.
+      let position = {
+        lat: this.polylineArray[i].startCoords.lat,
+        lng: this.polylineArray[i].startCoords.lng,
+      }
+      const marker = new window.google.maps.Marker({
+        position,
+        title: name,
+        label: `${i + 1}`,
+        optimized: false,
+      })
+      marker.setMap(this.map)
+      // Add a click listener for each marker, and set up the info window.
+      marker.addListener('click', () => {
+        infoWindow.close()
+        infoWindow.setContent(marker.getTitle())
+        infoWindow.open(marker.getMap(), marker)
+      })
+    },
     toggleMapView(view) {
       if (view === 'route') {
         if (this.mapView === 'heat') {
           this.mapView = 'route'
           this.heatmap.setMap(null)
-          for (let i = 0; i < this.polylineArray.length; i++) {
-            this.polylineArray[i].setPoly()
-          }
+          this.buildRouteMap()
         }
       } else {
         if (this.mapView === 'route') {
@@ -103,6 +123,7 @@ export default {
       getActivities(beforeDate, numActivities)
         .then((res) => {
           try {
+            res.forEach((activity) => this.activityNames.push(activity.name))
             this.map = new window.google.maps.Map(this.$refs['map'], {
               center: {
                 lat: res[0].start_latlng[0],
@@ -125,7 +146,7 @@ export default {
           ? this.buildPath(activity.map.summary_polyline)
           : null
       })
-      this.buildHeatMap()
+      this.mapView === 'heat' ? this.buildHeatMap() : this.buildRouteMap()
     },
     buildPath(polyline) {
       let latLngArr = []
@@ -143,11 +164,23 @@ export default {
         removePoly: () => {
           return activityPath.setMap(null)
         },
+        startCoords: {
+          lat: activityPath.latLngs.Nb[0].Nb[0].lat(),
+          lng: activityPath.latLngs.Nb[0].Nb[0].lng(),
+        },
       })
       activityPath.latLngs.Nb[0].Nb.forEach((coords) => {
         latLngArr.push([coords.lat(), coords.lng()])
       })
       this.latLngArray = [...this.latLngArray, ...latLngArr]
+    },
+    buildRouteMap() {
+      this.activityNames.forEach((name, i) => {
+        this.addMarker(name, i)
+      })
+      for (let i = 0; i < this.polylineArray.length; i++) {
+        this.polylineArray[i].setPoly()
+      }
     },
     buildHeatMap() {
       let heatMapData = []
