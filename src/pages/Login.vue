@@ -41,7 +41,8 @@ h1 {
   font-size: 38px;
   margin: 0 0 5px 0;
   color: #fc4c02;
-  font-family: MaisonNeue-Black, sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
 }
 .desc {
   margin-bottom: 20px;

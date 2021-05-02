@@ -100,7 +100,7 @@ export default {
 <style scoped>
 h1 {
   color: #fc4c02;
-  font-family: MaisonNeue-Bold, sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 img {
   border-radius: 50%;

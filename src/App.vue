@@ -35,26 +35,7 @@ export default {
 }
 </script>
 <style>
-@font-face {
-  font-family: 'MaisonNeue';
-  src: local('MaisonNeue-Bold'),
-    url(./fonts/MaisonNeue/MaisonNeue-Bold.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'MaisonNeue-Demi';
-  src: local('MaisonNeue-Demi'),
-    url(./fonts/MaisonNeue/MaisonNeue-Demi.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'MaisonNeue-Book';
-  src: local('MaisonNeue-Book'),
-    url(./fonts/MaisonNeue/MaisonNeue-Book.ttf) format('truetype');
-}
-@font-face {
-  font-family: 'MaisonNeue-Light';
-  src: local('MaisonNeue-Light'),
-    url(./fonts/MaisonNeue/MaisonNeue-Light.ttf) format('truetype');
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
 html,
 body,
 #app {
@@ -63,7 +44,7 @@ body,
   overflow-x: hidden;
 }
 #app {
-  font-family: MaisonNeue-Book, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
