@@ -39,6 +39,9 @@
       </button>
     </div>
     <div class="map" ref="map"></div>
+    <div v-if="loading" class="loading-wrapper">
+      <loader />
+    </div>
   </div>
   <modal :open="modalOpen" @closeModal="closeModal" />
 </template>
@@ -46,11 +49,13 @@
 <script>
 import { logout, getActivities } from '../services'
 import Modal from '../components/Modal.vue'
+import Loader from '../components/Loader.vue'
 
 export default {
   name: 'MapView',
   components: {
     Modal,
+    Loader,
   },
   data() {
     return {
@@ -63,6 +68,7 @@ export default {
       mapView: 'heat',
       modalOpen: null,
       firstModal: null,
+      loading: false,
     }
   },
   methods: {
@@ -127,6 +133,7 @@ export default {
       logout()
     },
     loadMap() {
+      this.loading = true
       let beforeDate = this.$store.state.mapData.beforeDate
       let numActivities = this.$store.state.mapData.numActivities
       getActivities(1, beforeDate, numActivities)
@@ -137,6 +144,7 @@ export default {
                 ? this.activityNames.push(activity.name)
                 : null
             )
+            this.loading = false
             this.map = new window.google.maps.Map(this.$refs['map'], {
               center: {
                 lat: res[0].start_latlng[0],
@@ -186,6 +194,15 @@ export default {
         latLngArr.push([coords.lat(), coords.lng()])
       })
       this.latLngArray = [...this.latLngArray, ...latLngArr]
+      let heatMapData = []
+      this.latLngArray.forEach((coords) => {
+        heatMapData.push(new window.google.maps.LatLng(coords[0], coords[1]))
+      })
+      this.heatmap = new window.google.maps.visualization.HeatmapLayer({
+        data: heatMapData,
+        maxIntensity: 50,
+        opacity: 1,
+      })
     },
     buildRouteMap() {
       this.activityNames.forEach((name, i) => {
@@ -196,15 +213,6 @@ export default {
       }
     },
     buildHeatMap() {
-      let heatMapData = []
-      this.latLngArray.forEach((coords) => {
-        heatMapData.push(new window.google.maps.LatLng(coords[0], coords[1]))
-      })
-      this.heatmap = new window.google.maps.visualization.HeatmapLayer({
-        data: heatMapData,
-        maxIntensity: 50,
-        opacity: 1,
-      })
       this.heatmap.setMap(this.map)
     },
   },
@@ -289,12 +297,26 @@ export default {
     height: 100%;
     width: 100%;
   }
+  .loading-wrapper {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    height: 100%;
+    width: calc(100% - 80px);
+  }
 }
 @media only screen and (max-width: 750px) {
   .map-nav {
     width: 100%;
   }
   .map {
+    height: calc(100% - 90px);
+    width: 100%;
+  }
+  .loading-wrapper {
+    position: absolute;
+    top: 40px;
+    left: 0;
     height: calc(100% - 90px);
     width: 100%;
   }
