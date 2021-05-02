@@ -124,10 +124,6 @@ export default {
 <style scoped>
 .mapview-wrapper {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 .map-nav {
   display: flex;
@@ -150,6 +146,10 @@ export default {
   .mapview-wrapper {
     height: 100%;
     margin-left: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .map-nav {
     width: 50%;
