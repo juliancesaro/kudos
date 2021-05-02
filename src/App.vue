@@ -1,18 +1,18 @@
 <template>
   <div v-if="loading"></div>
   <Login v-else-if="!loggedIn()" />
-  <Profile v-else />
+  <PageWrapper v-else />
 </template>
 
 <script>
 import Login from './pages/Login.vue'
-import Profile from './pages/Profile.vue'
+import PageWrapper from './pages/PageWrapper.vue'
 import { getAccessToken } from './services'
 export default {
   name: 'App',
   components: {
     Login,
-    Profile,
+    PageWrapper,
   },
   data() {
     return {
@@ -51,5 +51,8 @@ body,
   color: #2c3e50;
   width: 100%;
   background-color: #efefef;
+}
+button {
+  font-family: 'Montserrat', sans-serif;
 }
 </style>

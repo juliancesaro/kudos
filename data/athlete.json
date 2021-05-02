@@ -1,0 +1,22 @@
+{
+  "id": 33613684,
+  "username": "julian_cesaro",
+  "resource_state": 2,
+  "firstname": "Julian",
+  "lastname": "Cesaro",
+  "bio": "🏃‍♂️",
+  "city": "Sydney",
+  "state": "NSW",
+  "country": null,
+  "sex": "M",
+  "premium": false,
+  "summit": false,
+  "created_at": "2018-08-09T23:19:53Z",
+  "updated_at": "2021-04-02T14:12:44Z",
+  "badge_type_id": 0,
+  "weight": 90.0,
+  "profile_medium": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/33613684/16579666/1/medium.jpg",
+  "profile": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/33613684/16579666/1/large.jpg",
+  "friend": null,
+  "follower": null
+}

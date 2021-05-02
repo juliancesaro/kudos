@@ -1,25 +1,20 @@
-// import { createWebHistory, createRouter } from 'vue-router'
-// import Login from '@/pages/Login.vue'
-// import Redirect from '@/pages/Redirect.vue'
-// import Profile from '@/pages/Profile.vue'
+import { createWebHistory, createRouter } from 'vue-router'
+import Profile from '@/pages/Profile.vue'
+import MapView from '@/pages/MapView.vue'
 
-// const history = createWebHistory()
-// const router = createRouter({
-//   history,
-//   routes: [
-//     // {
-//     //   path: '/login',
-//     //   component: Login,
-//     // },
-//     // {
-//     //   path: '/redirect',
-//     //   component: Redirect,
-//     // },
-//     {
-//       path: '/',
-//       component: Profile,
-//     },
-//   ],
-// })
+const history = createWebHistory()
+const router = createRouter({
+  history,
+  routes: [
+    {
+      path: '/profile',
+      component: Profile,
+    },
+    {
+      path: '/map',
+      component: MapView,
+    },
+  ],
+})
 
-// export default router
+export default router
