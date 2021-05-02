@@ -17,7 +17,7 @@
           </button>
         </div>
       </div>
-      <button class="settings" @click="openModal(false)">
+      <button class="settings" @click="openModal()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-settings"
@@ -40,7 +40,7 @@
     </div>
     <div class="map" ref="map"></div>
   </div>
-  <modal :open="modalOpen" :first="firstModal" @closeModal="closeModal" />
+  <modal :open="modalOpen" @closeModal="closeModal" />
 </template>
 
 <script>
@@ -62,11 +62,11 @@ export default {
       heatmap: null,
       mapView: 'heat',
       modalOpen: null,
+      firstModal: null,
     }
   },
   methods: {
-    openModal(first) {
-      this.firstModal = first
+    openModal() {
       this.modalOpen = true
     },
     closeModal(mapData) {
@@ -129,7 +129,7 @@ export default {
     loadMap() {
       let beforeDate = this.$store.state.mapData.beforeDate
       let numActivities = this.$store.state.mapData.numActivities
-      getActivities(beforeDate, numActivities)
+      getActivities(1, beforeDate, numActivities)
         .then((res) => {
           try {
             res.forEach((activity) =>
@@ -210,7 +210,7 @@ export default {
   },
   mounted() {
     if (!this.$store.state.mapData) {
-      this.openModal(true)
+      this.openModal()
     } else {
       this.loadMap()
     }
@@ -239,7 +239,6 @@ export default {
   border: none;
   font-weight: 500;
   background-color: #efefef;
-  cursor: pointer;
 }
 .map-nav-buttons > .btn-selected {
   color: white;
@@ -256,7 +255,6 @@ export default {
   margin: 0 0 0 auto;
   padding: 0;
   border: none;
-  cursor: pointer;
   background-color: #efefef;
 }
 @media only screen and (min-width: 751px) {

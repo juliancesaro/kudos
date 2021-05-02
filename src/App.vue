@@ -25,7 +25,10 @@ export default {
     },
   },
   mounted() {
-    if (window.location.pathname === '/exchange_token') {
+    if (
+      window.location.pathname === '/exchange_token' &&
+      !window.location.search.includes('error')
+    ) {
       this.loading = true
     }
     getAccessToken().then((res) => {
@@ -58,6 +61,7 @@ body,
   background-color: #efefef;
 }
 button {
+  cursor: pointer;
   font-family: 'Montserrat', sans-serif;
 }
 </style>

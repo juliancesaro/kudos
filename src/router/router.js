@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Profile from '@/pages/Profile.vue'
 import MapView from '@/pages/MapView.vue'
+import Stats from '@/pages/Stats.vue'
 
 const history = createWebHistory()
 const router = createRouter({
@@ -13,6 +14,10 @@ const router = createRouter({
     {
       path: '/map',
       component: MapView,
+    },
+    {
+      path: '/stats',
+      component: Stats,
     },
   ],
 })

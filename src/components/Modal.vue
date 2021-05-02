@@ -42,7 +42,7 @@
       >
         Save
       </button>
-      <button v-if="!first" class="close-btn" @click="close">
+      <button class="close-btn" @click="close">
         Cancel
       </button>
     </div>
@@ -54,7 +54,6 @@ export default {
   name: 'Modal',
   props: {
     open: Boolean,
-    first: Boolean,
   },
   data() {
     return {
@@ -92,7 +91,7 @@ export default {
 }
 .modal {
   background-color: white;
-  width: 80%;
+  width: 90%;
   max-width: 400px;
   margin: 0 auto;
   border-radius: 3px;
@@ -113,24 +112,28 @@ h2 {
   background-color: #f5f5f5;
 }
 .warning {
-  font-size: 12px;
+  font-size: 14px;
 }
 .date-input {
   border-radius: 3px;
+  border: 1px solid black;
   background-color: #f5f5f5;
 }
 .num-activities {
+  font-size: 16px;
   margin-bottom: 15px;
+}
+.before-date {
+  font-size: 16px;
 }
 .save-btn {
   margin-top: 25px;
   width: 100%;
   font-weight: 600;
-  height: 25px;
+  height: 30px;
   border-radius: 3px;
   border: none;
   color: white;
-  cursor: pointer;
 }
 .active {
   background-color: #fc4c02;
@@ -143,11 +146,10 @@ h2 {
   margin-top: 10px;
   width: 100%;
   font-weight: 600;
-  height: 25px;
+  height: 30px;
   border-radius: 3px;
   border: none;
   background-color: rgb(107, 107, 107);
   color: white;
-  cursor: pointer;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="profile-wrapper">
-    <div v-if="user" class="profile">
+    <div v-if="!loading" class="profile">
       <div class="profile-header">
         <img :src="user.profile" />
         <h1>{{ user.firstname + ' ' + user.lastname }}</h1>
@@ -28,50 +28,29 @@
         </div>
       </div>
     </div>
+    <loader v-else />
   </div>
 </template>
 
 <script>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
 import { logout, getUserInfo, getActivities } from '../services'
 import ActivityCard from '../components/ActivityCard.vue'
+import Loader from '../components/Loader.vue'
 
 export default {
   name: 'Profile',
   components: {
     ActivityCard,
-  },
-  setup() {
-    const store = useStore()
-    if (!store.state.user) {
-      getUserInfo()
-        .then((res) => {
-          store.dispatch('storeUser', res)
-        })
-        .catch((error) => console.log(error))
-    }
-    if (!store.state.recentActivities) {
-      const now = new Date()
-      const utcMilllisecondsSinceEpoch =
-        now.getTime() + now.getTimezoneOffset() * 60 * 1000
-      const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
-      getActivities(utcSecondsSinceEpoch, 5)
-        .then((res) => {
-          store.dispatch('storeRecentActivities', res)
-        })
-        .catch((error) => console.log(error))
-    }
-    return {
-      user: computed(() => store.state.user),
-      recentActivities: computed(() => store.state.recentActivities),
-    }
+    Loader,
   },
   data() {
     return {
       map: null,
       latLngArray: [],
       activitiesPagination: 1,
+      loading: true,
+      user: null,
+      recentActivities: null,
     }
   },
   methods: {
@@ -80,11 +59,41 @@ export default {
       logout()
     },
   },
+  mounted() {
+    if (!this.$store.state.user) {
+      getUserInfo()
+        .then((res) => {
+          this.user = res
+          this.$store.dispatch('storeUser', res)
+        })
+        .catch((error) => console.log(error))
+    } else {
+      this.user = this.$store.state.user
+      this.loading = false
+    }
+    if (!this.$store.state.recentActivities) {
+      const now = new Date()
+      const utcMilllisecondsSinceEpoch =
+        now.getTime() + now.getTimezoneOffset() * 60 * 1000
+      const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
+      getActivities(1, utcSecondsSinceEpoch, 5)
+        .then((res) => {
+          this.recentActivities = res
+          this.$store.dispatch('storeRecentActivities', res)
+          this.loading = false
+        })
+        .catch((error) => console.log(error))
+    } else {
+      this.recentActivities = this.$store.state.recentActivities
+      this.loading = false
+    }
+  },
 }
 </script>
 
 <style scoped>
 .profile-wrapper {
+  height: 100%;
   min-width: 220px;
 }
 .profile-header {
@@ -118,7 +127,7 @@ h2 {
 }
 @media only screen and (min-width: 750px) {
   .profile-wrapper {
-    margin-left: 110px;
+    margin-left: 80px;
     padding: 0 25px;
   }
   .profile-header {
@@ -147,13 +156,14 @@ h2 {
     margin: 10px auto;
   }
   .profile-recent {
+    padding-bottom: 50px;
     max-width: 600px;
     margin: 0 auto;
   }
 }
 @media only screen and (max-width: 750px) {
   .profile-wrapper {
-    padding: 0 25px;
+    padding: 0 25px 50px 25px;
   }
   .profile-header {
     margin: 0 40px 30px 40px;
@@ -181,7 +191,7 @@ h2 {
     margin: 10px auto 0 auto;
   }
   .profile-recent {
-    margin-bottom: 100px;
+    padding-bottom: 70px;
   }
 }
 @media only screen and (max-width: 400px) {

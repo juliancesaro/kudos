@@ -37,11 +37,7 @@
           <line x1="9" y1="4" x2="9" y2="17" />
           <line x1="15" y1="7" x2="15" y2="20" /></svg
       ></router-link>
-      <router-link
-        style="pointer-events: none;"
-        class="navlink"
-        active-class="active"
-        to="/stats"
+      <router-link class="navlink" active-class="active" to="/stats"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chart-bar"
@@ -82,6 +78,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
   }
   .navbar > img {
     width: 40px;
@@ -125,14 +123,14 @@ export default {
   }
   .navlink {
     width: 50%;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 5px;
   }
   .active {
     border-bottom: 5px solid #ffb89a;
-    padding-bottom: 0;
+    padding-top: 5px;
   }
 }
 </style>

@@ -5,9 +5,11 @@ export const store = createStore({
     return {
       accessToken: null,
       user: null,
-      activities: null,
       recentActivities: null,
+      activities: null,
+      allActivities: null,
       mapData: null,
+      userStats: null,
     }
   },
   mutations: {
@@ -26,6 +28,12 @@ export const store = createStore({
     storeMapData(state, mapData) {
       state.mapData = mapData
     },
+    storeUserStats(state, userStats) {
+      state.userStats = userStats
+    },
+    storeAllActivities(state, allActivities) {
+      state.allActivities = allActivities
+    },
   },
   actions: {
     storeToken({ commit }, token) {
@@ -37,23 +45,20 @@ export const store = createStore({
     storeUser({ commit }, user) {
       commit('storeUser', user)
     },
-    removeUser({ commit }) {
-      commit('storeUser', null)
-    },
     storeActivities({ commit }, activities) {
       commit('storeActivities', activities)
-    },
-    removeActivities({ commit }) {
-      commit('storeActivities', null)
     },
     storeRecentActivities({ commit }, activities) {
       commit('storeRecentActivities', activities)
     },
-    removeRecentActivities({ commit }) {
-      commit('storeRecentActivities', null)
-    },
     storeMapData({ commit }, mapData) {
       commit('storeMapData', mapData)
+    },
+    storeUserStats({ commit }, userStats) {
+      commit('storeUserStats', userStats)
+    },
+    storeAllActivities({ commit }, allActivities) {
+      commit('storeAllActivities', allActivities)
     },
   },
 })
