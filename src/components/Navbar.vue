@@ -6,8 +6,8 @@
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-user"
-          width="44"
-          height="44"
+          width="34"
+          height="34"
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="#fff"
@@ -23,8 +23,8 @@
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-map"
-          width="44"
-          height="44"
+          width="34"
+          height="34"
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="#fff"
@@ -45,8 +45,8 @@
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chart-bar"
-          width="44"
-          height="44"
+          width="34"
+          height="34"
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="#fff"
@@ -76,7 +76,7 @@ export default {
     position: absolute;
     bottom: 0;
     top: 0;
-    width: 110px;
+    width: 80px;
     height: 100%;
     background-color: #fc4c02;
     display: flex;
@@ -84,10 +84,10 @@ export default {
     justify-content: center;
   }
   .navbar > img {
-    width: 50px;
+    width: 40px;
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: 20px;
+    left: 20px;
   }
   .links-wrapper {
     display: flex;
@@ -96,14 +96,14 @@ export default {
   }
   .navlink {
     height: 70px;
+    width: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left: 5px;
   }
   .active {
+    width: 65px;
     border-left: 5px solid #ffb89a;
-    padding-left: 0;
   }
 }
 @media only screen and (max-width: 750px) {
@@ -113,7 +113,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 50px;
     background-color: #fc4c02;
   }
   .navbar > img {

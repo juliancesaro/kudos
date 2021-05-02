@@ -52,7 +52,11 @@ export default {
         .catch((error) => console.log(error))
     }
     if (!store.state.recentActivities) {
-      getActivities(1, 5)
+      const now = new Date()
+      const utcMilllisecondsSinceEpoch =
+        now.getTime() + now.getTimezoneOffset() * 60 * 1000
+      const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
+      getActivities(utcSecondsSinceEpoch, 5)
         .then((res) => {
           console.log(res)
           store.dispatch('storeRecentActivities', res)

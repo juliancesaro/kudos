@@ -7,6 +7,7 @@ export const store = createStore({
       user: null,
       activities: null,
       recentActivities: null,
+      mapData: null,
     }
   },
   mutations: {
@@ -21,6 +22,9 @@ export const store = createStore({
     },
     storeRecentActivities(state, activities) {
       state.recentActivities = activities
+    },
+    storeMapData(state, mapData) {
+      state.mapData = mapData
     },
   },
   actions: {
@@ -47,6 +51,9 @@ export const store = createStore({
     },
     removeRecentActivities({ commit }) {
       commit('storeRecentActivities', null)
+    },
+    storeMapData({ commit }, mapData) {
+      commit('storeMapData', mapData)
     },
   },
 })

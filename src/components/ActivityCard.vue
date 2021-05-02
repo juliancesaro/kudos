@@ -18,22 +18,29 @@
       />
     </div>
     <div class="card-bottom">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="icon icon-tabler icon-tabler-heart"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="#2c3e50"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+      <div class="kudos">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon icon-tabler icon-tabler-heart"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#2c3e50"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
+          />
+        </svg>
+        <p>{{ activity.kudos_count }}</p>
+      </div>
+      <a
+        :href="`https://www.strava.com/activities/${activity.id}`"
+        target="_blank"
+        >View on Strava</a
       >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path
-          d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
-        />
-      </svg>
-      <p>{{ activity.kudos_count }}</p>
     </div>
   </div>
 </template>
@@ -129,11 +136,22 @@ export default {
   margin-top: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-weight: 12px;
 }
-.card-bottom > p {
+.kudos {
+  display: flex;
+  align-items: center;
+}
+.kudos > p {
   margin: 0 0 0 5px;
   font-size: 14px;
   font-weight: 700;
+}
+.card-bottom > a {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fc4c02;
+  text-decoration: none;
 }
 </style>
