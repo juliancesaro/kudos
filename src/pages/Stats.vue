@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import { getActivities } from '../services'
-import Loader from '../components/Loader.vue'
+import { getActivities } from "../services";
+import Loader from "../components/Loader.vue";
 
 export default {
-  name: 'Stats',
+  name: "Stats",
   components: {
     Loader,
   },
@@ -32,94 +32,96 @@ export default {
       allActivities: [],
       done: false,
       page: 1,
-    }
+    };
   },
   methods: {
     createStats() {
-      let longestRun = 0
-      let numRuns = 0
-      let numKudos = 0
-      let totalDistance = 0
-      let totalElev = 0
+      let longestRun = 0;
+      let numRuns = 0;
+      let numKudos = 0;
+      let totalDistance = 0;
+      let totalElev = 0;
       this.allActivities.forEach((activity) => {
-        if (activity.type === 'Run' && activity.distance > longestRun) {
-          longestRun = activity.distance
+        if (activity.type === "Run" && activity.distance > longestRun) {
+          longestRun = activity.distance;
         }
-        if (activity.type === 'Run') {
-          numRuns++
+        if (activity.type === "Run") {
+          numRuns++;
         }
-        numKudos += activity.kudos_count
-        if (activity.type === 'Run') {
-          totalDistance += activity.distance
+        numKudos += activity.kudos_count;
+        if (activity.type === "Run") {
+          totalDistance += activity.distance;
         }
-        if (activity.type === 'Run') {
-          totalElev += activity.total_elevation_gain
+        if (activity.type === "Run") {
+          totalElev += activity.total_elevation_gain;
         }
-      })
+      });
       this.stats = [
+        { name: "Total Kudos", emoji: "👍", val: numKudos },
         {
-          name: 'Longest Run',
-          emoji: '🏃',
+          name: "Longest Run",
+          emoji: "🏃",
           val: `${
             longestRun > 1000
               ? (longestRun / 1000).toFixed(2)
               : longestRun.toFixed(2)
-          }${longestRun > 1000 ? 'KM' : 'M'}`,
+          }${longestRun > 1000 ? "KM" : "M"}`,
         },
-        { name: 'Number of Runs All Time', emoji: '🕐', val: numRuns },
-        { name: 'Total Kudos', emoji: '👍', val: numKudos },
+        { name: "Runs All Time", emoji: "🕐", val: numRuns },
         {
-          name: 'Total Running Distance',
-          emoji: '📏',
+          name: "Total Running Distance",
+          emoji: "📏",
           val: `${
             totalDistance > 1000
               ? (totalDistance / 1000).toFixed(2)
               : totalDistance.toFixed(2)
-          }${totalDistance > 1000 ? 'KM' : 'M'}`,
+          }${totalDistance > 1000 ? "KM" : "M"}`,
         },
         {
-          name: 'Total Running Elevation',
-          emoji: '📈',
+          name: "Total Running Elevation",
+          emoji: "📈",
           val: `${
             totalElev > 1000
               ? (totalElev / 1000).toFixed(2)
               : totalElev.toFixed(2)
-          }${totalElev > 1000 ? 'KM' : 'M'}`,
+          }${totalElev > 1000 ? "KM" : "M"}`,
         },
-      ]
-      this.$store.dispatch('storeUserStats', this.stats)
-      this.loading = false
+      ];
+      this.$store.dispatch("storeUserStats", this.stats);
+      this.loading = false;
     },
     fetchAllActivities(time) {
       getActivities(this.page, time, 200)
         .then((res) => {
-          this.allActivities = [...this.allActivities, ...res]
+          this.allActivities = [...this.allActivities, ...res];
           if (res.length < 200) {
-            this.$store.dispatch('storeAllActivities', this.allActivities)
-            this.createStats()
-            return
+            this.$store.dispatch("storeAllActivities", this.allActivities);
+            this.createStats();
+            return;
           } else {
-            this.page++
-            this.fetchAllActivities()
+            this.page++;
+            this.fetchAllActivities();
           }
         })
-        .catch((error) => console.log(error))
+        .catch((error) => console.log(error));
     },
   },
   mounted() {
     if (!this.$store.state.allActivities) {
-      const now = new Date()
+      const now = new Date();
       const utcMilllisecondsSinceEpoch =
-        now.getTime() + now.getTimezoneOffset() * 60 * 1000
-      const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
-      this.fetchAllActivities(utcSecondsSinceEpoch)
+        now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+      const utcSecondsSinceEpoch = Math.round(
+        utcMilllisecondsSinceEpoch / 1000
+      );
+      this.fetchAllActivities(utcSecondsSinceEpoch);
     } else {
-      this.allActivities = this.$store.state.allActivities
-      this.stats = this.$store.state.userStats
-      this.loading = false
+      this.allActivities = this.$store.state.allActivities;
+      this.stats = this.$store.state.userStats;
+      this.loading = false;
     }
   },
-}
+};
 </script>
 
 <style scoped>
