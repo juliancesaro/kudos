@@ -9,12 +9,14 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "express": "*",
+    "mapbox-gl": "^2.2.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.6",
-    "vuex": "^4.0.0",
-    "express": "*"
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

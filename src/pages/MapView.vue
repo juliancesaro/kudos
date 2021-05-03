@@ -38,7 +38,7 @@
         </svg>
       </button>
     </div>
-    <div class="map" ref="map"></div>
+    <div id="map" class="map" ref="map"></div>
     <div v-if="loading" class="loading-wrapper">
       <loader />
     </div>
@@ -48,6 +48,7 @@
 
 <script>
 import { logout, getActivities } from '../services'
+import polyline from '@mapbox/polyline'
 import Modal from '../components/Modal.vue'
 import Loader from '../components/Loader.vue'
 
@@ -145,19 +146,51 @@ export default {
                 : null
             )
             this.loading = false
-            this.map = new window.google.maps.Map(this.$refs['map'], {
-              center: {
-                lat: res[0].start_latlng[0],
-                lng: res[0].start_latlng[1],
-              },
-              zoom: 12,
+            var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
+
+            mapboxgl.accessToken =
+              'pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzg4eTN0ZjFsOGwzMXBkbGs2Mmsxc3kifQ.ve_9aEO0qzGV1bDiX1noyA'
+            let map = new mapboxgl.Map({
+              container: 'map',
+              style: 'mapbox://styles/mapbox/streets-v11',
             })
+            map.on('load', function() {
+              let geoJSON = polyline.toGeoJSON(
+                'zzamEkbgy[VOl@uAr@iAPUpBoDz@qARa@VURIZYd@I\\J`Ar@n@n@~@z@jAz@b@D~HpH|@j@b@b@LBf@?rAMdBKTK\\m@v@gAxBmDT[JQZe@Na@vAgBXk@NM|BsDb@e@pA}BzB}Ch@{@L]p@iAHg@MaASg@U}@e@qAM}@Sw@Sq@As@Dm@?a@DWLk@N_@FWLg@FAJM@[[}@Ee@Au@CSIUAe@Be@No@Js@Bo@YaBIWU[_@WUc@U{@MaBKq@KS@mAWo@s@s@WKW?g@@q@Le@CaAB_CCc@Dm@Ca@BUE_@BYAaBHc@Ge@?iAv@c@N}@j@gB|Ae@RqA|@YXoB`B}AfAQP}@jAQHMN]l@mAzAqA~BI^?FLf@LZhAbAl@n@Zd@Ez@?n@[t@MTa@j@]l@o@t@INId@Mb@Cl@BNJXFHf@bBD\\AZCXy@rA]lA[f@a@~@y@`AOVWl@@JDH\\Zj@b@j@r@bChBFF?Lo@fAq@z@{@xA[n@}@dA{@jAu@~As@`A'
+              )
+              let heatMapData = { type: 'FeatureCollection', features: [] }
+              geoJSON.coordinates.forEach((coord) => {
+                heatMapData.features.push({
+                  type: 'Feature',
+                  geometry: { type: 'Point', coordinates: coord },
+                })
+              })
+              map.addSource('route', {
+                type: 'geojson',
+                data: heatMapData,
+              })
+              map.addLayer({
+                id: 'route',
+                type: 'heatmap',
+                source: 'route',
+                paint: {
+                  'heatmap-intensity': {
+                    stops: [
+                      [11, 0.1],
+                      [15, 0.1],
+                    ],
+                  },
+                  'heatmap-radius': 10,
+                },
+              })
+            })
+            this.map = map
           } catch (e) {
             console.log(e)
             alert('You must enable cache for Google Maps')
           }
           if (res) this.$store.dispatch('storeActivities', res)
-          this.createLatLngArray(res)
+          // this.createLatLngArray(res)
         })
         .catch((error) => console.log(error))
     },

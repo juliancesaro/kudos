@@ -12,8 +12,10 @@
         v-if="cardWidth"
         class="map-image"
         :src="
-          `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCjlvn1VDwtp_v_xCNy5V_oZ1vqxsxvv2M&size=${cardWidth -
-            20}x250&path=enc:${activity.map.summary_polyline}`
+          `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/path-5+05445E(${encodeURIComponent(
+            activity.map.summary_polyline
+          )})/auto/${cardWidth -
+            20}x250?access_token=pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzg4eTN0ZjFsOGwzMXBkbGs2Mmsxc3kifQ.ve_9aEO0qzGV1bDiX1noyA`
         "
       />
     </div>
