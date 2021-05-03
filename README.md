@@ -1,6 +1,6 @@
 # kudos
 
-A web app for visualizing Strava data
+View your Strava activities on Google Maps as a heatmap and view your stats.
 
 ## Project setup
 
