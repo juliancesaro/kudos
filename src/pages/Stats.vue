@@ -2,6 +2,7 @@
   <div class="stats-wrapper">
     <div v-if="!loading" class="stats">
       <h1>Your Running Stats</h1>
+      <img src="../assets/fitness_stats.svg" />
       <div class="stats-list">
         <div v-for="stat in stats" :key="stat.name" class="stat">
           <p>{{ stat.emoji }}</p>
@@ -134,8 +135,10 @@ export default {
   max-width: 600px;
   margin: 0 auto;
 }
-.stats-list {
-  padding-top: 30px;
+.stats > img {
+  width: 50%;
+  max-width: 200px;
+  padding-top: 10px;
 }
 .stat-text {
   display: flex;

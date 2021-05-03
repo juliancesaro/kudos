@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <img class="login-image" src="../assets/runner_start.svg" />
     <img class="powered" src="../assets/powered_by_strava.svg" />
     <h1>Kudos</h1>
     <div class="desc">A web app for visualizing your Strava data.</div>
@@ -11,18 +12,18 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: "Login",
   methods: {
     login() {
-      const { VUE_APP_CLIENT_ID } = process.env
+      const { VUE_APP_CLIENT_ID } = process.env;
       const redirectUrl =
-        process.env.NODE_ENV === 'production'
-          ? 'https://kudos-web.herokuapp.com'
-          : 'http://localhost:8080'
-      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`
+        process.env.NODE_ENV === "production"
+          ? "https://kudos-web.herokuapp.com"
+          : "http://localhost:8080";
+      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`;
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -40,11 +41,16 @@ export default {
   top: 0;
   left: calc(100% - 150px);
 }
+.login-image {
+  margin-bottom: 15px;
+  width: 50%;
+  max-width: 200px;
+}
 h1 {
   font-size: 38px;
   margin: 0 0 5px 0;
   color: #fc4c02;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 900;
 }
 .desc {
