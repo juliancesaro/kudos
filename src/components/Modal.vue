@@ -107,7 +107,7 @@ h2 {
   margin-bottom: 30px;
 }
 .num-input {
-  border: 1px solid black;
+  border: 1px solid lightgray;
   border-radius: 3px;
   background-color: #f5f5f5;
 }
@@ -116,7 +116,7 @@ h2 {
 }
 .date-input {
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid lightgray;
   background-color: #f5f5f5;
 }
 .num-activities {
@@ -151,5 +151,25 @@ h2 {
   border: none;
   background-color: rgb(107, 107, 107);
   color: white;
+}
+@media only screen and (max-width: 500px) {
+  .num-activities {
+    font-size: 18px;
+  }
+  .num-input {
+    height: 25px;
+  }
+  .before-date {
+    font-size: 18px;
+  }
+  .date-input {
+    height: 30px;
+  }
+  .save-btn {
+    height: 40px;
+  }
+  .close-btn {
+    height: 40px;
+  }
 }
 </style>

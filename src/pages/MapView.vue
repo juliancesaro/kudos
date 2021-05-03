@@ -48,9 +48,10 @@
 
 <script>
 import { logout, getActivities } from '../services'
-import polyline from '@mapbox/polyline'
+import polylineUtil from '@mapbox/polyline'
 import Modal from '../components/Modal.vue'
 import Loader from '../components/Loader.vue'
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js'
 
 export default {
   name: 'MapView',
@@ -88,32 +89,29 @@ export default {
       this.modalOpen = false
     },
     addMarker(name, i) {
-      const infoWindow = new window.google.maps.InfoWindow()
       // Create the markers.
-      let position = {
-        lat: this.polylineArray[i].startCoords.lat,
-        lng: this.polylineArray[i].startCoords.lng,
-      }
-      const marker = new window.google.maps.Marker({
-        position,
-        title: name,
-        label: `${i + 1}`,
-        optimized: false,
-      })
-      this.markersArray.push((map) => marker.setMap(map))
-      marker.setMap(this.map)
-      // Add a click listener for each marker, and set up the info window.
-      marker.addListener('click', () => {
-        infoWindow.close()
-        infoWindow.setContent(marker.getTitle())
-        infoWindow.open(marker.getMap(), marker)
-      })
+      let position = [
+        this.polylineArray[i].startCoords.lat,
+        this.polylineArray[i].startCoords.lng,
+      ]
+      var el = document.createElement('div')
+      var img = document.createElement('div')
+      el.className = 'marker'
+      el.appendChild(img)
+      let marker = new mapboxgl.Marker(el)
+        .setLngLat(position)
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML('<h3 style="margin: 0;">' + name + '</h3>')
+        )
+        .addTo(this.map)
+      this.markersArray.push(marker)
     },
     toggleMapView(view) {
       if (view === 'route') {
         if (this.mapView === 'heat') {
           this.mapView = 'route'
-          this.heatmap.setMap(null)
+          this.map.removeLayer('heatmap')
           this.buildRouteMap()
         }
       } else {
@@ -123,9 +121,9 @@ export default {
             this.polylineArray[i].removePoly()
           }
           for (let i = 0; i < this.markersArray.length; i++) {
-            this.markersArray[i](null)
+            this.markersArray[i].remove()
           }
-          this.heatmap.setMap(this.map)
+          this.addHeatMap()
         }
       }
     },
@@ -146,96 +144,88 @@ export default {
                 : null
             )
             this.loading = false
-            var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
-
             mapboxgl.accessToken =
-              'pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzg4eTN0ZjFsOGwzMXBkbGs2Mmsxc3kifQ.ve_9aEO0qzGV1bDiX1noyA'
-            let map = new mapboxgl.Map({
+              'pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzhvNGEzOTA5d3Myb3FtZHV0N29weHIifQ.xt8T0KGhHNH1eqG-Vu-fuA'
+            this.map = new mapboxgl.Map({
               container: 'map',
               style: 'mapbox://styles/mapbox/streets-v11',
+              center: [res[0].start_latlng[1], res[0].start_latlng[0]],
+              zoom: 10,
             })
-            map.on('load', function() {
-              let geoJSON = polyline.toGeoJSON(
-                'zzamEkbgy[VOl@uAr@iAPUpBoDz@qARa@VURIZYd@I\\J`Ar@n@n@~@z@jAz@b@D~HpH|@j@b@b@LBf@?rAMdBKTK\\m@v@gAxBmDT[JQZe@Na@vAgBXk@NM|BsDb@e@pA}BzB}Ch@{@L]p@iAHg@MaASg@U}@e@qAM}@Sw@Sq@As@Dm@?a@DWLk@N_@FWLg@FAJM@[[}@Ee@Au@CSIUAe@Be@No@Js@Bo@YaBIWU[_@WUc@U{@MaBKq@KS@mAWo@s@s@WKW?g@@q@Le@CaAB_CCc@Dm@Ca@BUE_@BYAaBHc@Ge@?iAv@c@N}@j@gB|Ae@RqA|@YXoB`B}AfAQP}@jAQHMN]l@mAzAqA~BI^?FLf@LZhAbAl@n@Zd@Ez@?n@[t@MTa@j@]l@o@t@INId@Mb@Cl@BNJXFHf@bBD\\AZCXy@rA]lA[f@a@~@y@`AOVWl@@JDH\\Zj@b@j@r@bChBFF?Lo@fAq@z@{@xA[n@}@dA{@jAu@~As@`A'
-              )
-              let heatMapData = { type: 'FeatureCollection', features: [] }
-              geoJSON.coordinates.forEach((coord) => {
-                heatMapData.features.push({
-                  type: 'Feature',
-                  geometry: { type: 'Point', coordinates: coord },
-                })
-              })
-              map.addSource('route', {
-                type: 'geojson',
-                data: heatMapData,
-              })
-              map.addLayer({
-                id: 'route',
-                type: 'heatmap',
-                source: 'route',
-                paint: {
-                  'heatmap-intensity': {
-                    stops: [
-                      [11, 0.1],
-                      [15, 0.1],
-                    ],
-                  },
-                  'heatmap-radius': 10,
-                },
-              })
-            })
-            this.map = map
           } catch (e) {
             console.log(e)
-            alert('You must enable cache for Google Maps')
+            alert(
+              'There was an error loading Mapbox, please refresh your page.'
+            )
           }
           if (res) this.$store.dispatch('storeActivities', res)
-          // this.createLatLngArray(res)
+          this.map.on(
+            'load',
+            function() {
+              this.buildPathArray(res)
+            }.bind(this)
+          )
         })
         .catch((error) => console.log(error))
     },
-    createLatLngArray(activities) {
-      activities.forEach((activity) => {
+    buildPathArray(activities) {
+      activities.forEach((activity, i) => {
         activity.map.summary_polyline
-          ? this.buildPath(activity.map.summary_polyline)
+          ? this.buildPath(activity.map.summary_polyline, i)
           : null
       })
-      this.mapView === 'heat' ? this.buildHeatMap() : this.buildRouteMap()
+      let heatMapData = { type: 'FeatureCollection', features: [] }
+      this.latLngArray.forEach((coord) => {
+        heatMapData.features.push({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: coord },
+        })
+      })
+      this.map.addSource('heatmap', {
+        type: 'geojson',
+        data: heatMapData,
+      })
+      this.mapView === 'heat' ? this.addHeatMap() : this.buildRouteMap()
     },
-    buildPath(polyline) {
+    buildPath(polyline, i) {
       let latLngArr = []
-      const activityPath = new window.google.maps.Polyline({
-        path: window.google.maps.geometry.encoding.decodePath(polyline),
-        geodesic: true,
-        strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16),
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
+      let geoJSON = polylineUtil.toGeoJSON(polyline)
+      this.map.addSource('route-' + i, {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: geoJSON,
+        },
       })
       this.polylineArray.push({
         setPoly: () => {
-          return activityPath.setMap(this.map)
+          this.map.addLayer({
+            id: 'route-' + i,
+            type: 'line',
+            source: 'route-' + i,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round',
+            },
+            paint: {
+              'line-color': '#000000'.replace(/0/g, function() {
+                return (~~(Math.random() * 16)).toString(16)
+              }),
+              'line-width': 5,
+            },
+          })
         },
-        removePoly: () => {
-          return activityPath.setMap(null)
-        },
+        removePoly: () => this.map.removeLayer('route-' + i),
         startCoords: {
-          lat: activityPath.latLngs.Nb[0].Nb[0].lat(),
-          lng: activityPath.latLngs.Nb[0].Nb[0].lng(),
+          lat: geoJSON.coordinates[0][0],
+          lng: geoJSON.coordinates[0][1],
         },
       })
-      activityPath.latLngs.Nb[0].Nb.forEach((coords) => {
-        latLngArr.push([coords.lat(), coords.lng()])
+      geoJSON.coordinates.forEach((coords) => {
+        latLngArr.push([coords[0], coords[1]])
       })
       this.latLngArray = [...this.latLngArray, ...latLngArr]
-      let heatMapData = []
-      this.latLngArray.forEach((coords) => {
-        heatMapData.push(new window.google.maps.LatLng(coords[0], coords[1]))
-      })
-      this.heatmap = new window.google.maps.visualization.HeatmapLayer({
-        data: heatMapData,
-        maxIntensity: 50,
-        opacity: 1,
-      })
     },
     buildRouteMap() {
       this.activityNames.forEach((name, i) => {
@@ -245,8 +235,21 @@ export default {
         this.polylineArray[i].setPoly()
       }
     },
-    buildHeatMap() {
-      this.heatmap.setMap(this.map)
+    addHeatMap() {
+      this.map.addLayer({
+        id: 'heatmap',
+        type: 'heatmap',
+        source: 'heatmap',
+        paint: {
+          'heatmap-intensity': {
+            stops: [
+              [11, 0.1],
+              [15, 0.1],
+            ],
+          },
+          'heatmap-radius': 8,
+        },
+      })
     },
   },
   mounted() {
@@ -259,6 +262,30 @@ export default {
 }
 </script>
 
+<style>
+.marker {
+  width: 30px;
+  height: 80px;
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.marker > div {
+  background-image: url('../assets/marker.png');
+  background-size: cover;
+  width: 30px;
+  height: 40px;
+  border-radius: 50%;
+}
+.mapboxgl-popup {
+  max-width: 200px;
+}
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  padding: 10px 20px;
+}
+</style>
 <style scoped>
 .mapview-wrapper {
   height: 100%;
