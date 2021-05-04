@@ -4,22 +4,36 @@
       <h1>Activity Stats</h1>
       <img src="../assets/fitness_stats.svg" />
       <div class="stats-list">
-        <div class="kudos">
+        <div class="stat-group">
+          <div class="stat-header" @click="showKudos = !showKudos">
+            <h1>Kudos</h1>
+          </div>
           <stat-card
             v-for="stat in stats.kudos"
             :stat="stat"
+            :show="showKudos"
             :key="stat.name"
           />
         </div>
-        <div class="total">
+        <div class="stat-group" @click="showTotal = !showTotal">
+          <div class="stat-header"><h1>All Time</h1></div>
           <stat-card
             v-for="stat in stats.total"
             :stat="stat"
+            :show="showTotal"
             :key="stat.name"
           />
         </div>
-        <div class="ytd">
-          <stat-card v-for="stat in stats.ytd" :stat="stat" :key="stat.name" />
+        <div class="stat-group" @click="showYtd = !showYtd">
+          <div class="stat-header">
+            <h1>Year To Date</h1>
+          </div>
+          <stat-card
+            v-for="stat in stats.ytd"
+            :stat="stat"
+            :show="showYtd"
+            :key="stat.name"
+          />
         </div>
       </div>
     </div>
@@ -45,6 +59,9 @@ export default {
       allActivities: [],
       done: false,
       page: 1,
+      showKudos: false,
+      showTotal: false,
+      showYtd: false,
     }
   },
   methods: {
@@ -70,7 +87,7 @@ export default {
             longestRun = activity.distance
           }
         })
-        this.stats = {
+        ;(this.stats = {
           kudos: [
             { name: 'Total Kudos', emoji: '👍', val: numKudos },
             {
@@ -205,8 +222,8 @@ export default {
               }`,
             },
           ],
-        }
-        this.$store.dispatch('storeUserStats', this.stats)
+        }),
+          this.$store.dispatch('storeUserStats', this.stats)
         this.loading = false
       })
     },
@@ -229,11 +246,13 @@ export default {
       try {
         if (this.$store.state.user) {
           let stats = await getUserStats(this.$store.state.user.id)
+          console.log(stats)
           return stats
         } else {
           let user = await getUserInfo()
           this.$store.dispatch('storeUser', user)
           let stats = await getUserStats(user.id)
+          console.log(stats)
           return stats
         }
       } catch (e) {
@@ -271,22 +290,26 @@ export default {
   max-width: 200px;
   padding-top: 10px;
 }
-.stat-text {
+.stat-group {
+  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  margin: 5px auto;
+  height: 130px;
+}
+.stat-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.06);
 }
-.stat-text > p {
-  max-width: 50%;
-}
-.stat > p {
-  margin-bottom: 0;
-}
-p {
-  text-align: left;
-  font-weight: 600;
-}
-p:nth-child(2) {
-  color: #fc4c02;
+.stat-header > h1 {
+  align-self: center;
+  margin: 0;
 }
 @media only screen and (min-width: 750px) {
   .stats-wrapper {
