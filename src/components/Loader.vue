@@ -20,6 +20,9 @@ export default {
 }
 .lds-dual-ring {
   display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 80px;
   height: 80px;
 }
@@ -28,7 +31,6 @@ export default {
   display: block;
   width: 64px;
   height: 64px;
-  margin: 8px;
   border-radius: 50%;
   border: 6px solid #fc4c02;
   border-color: #fc4c02 transparent #fc4c02 transparent;

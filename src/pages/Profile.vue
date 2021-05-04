@@ -3,7 +3,7 @@
     <div v-if="!loading" class="profile">
       <div class="profile-header">
         <img :src="user.profile" />
-        <h1>{{ user.firstname + " " + user.lastname }}</h1>
+        <h1>{{ user.firstname + ' ' + user.lastname }}</h1>
         <p>{{ user.bio }}</p>
         <div class="profile-info">
           <div class="follower-count">
@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import { logout, getUserInfo, getActivities } from "../services";
-import ActivityCard from "../components/ActivityCard.vue";
-import Loader from "../components/Loader.vue";
+import { logout, getUserInfo, getActivities } from '../services'
+import ActivityCard from '../components/ActivityCard.vue'
+import Loader from '../components/Loader.vue'
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   components: {
     ActivityCard,
     Loader,
@@ -51,46 +51,44 @@ export default {
       loading: true,
       user: null,
       recentActivities: null,
-    };
+    }
   },
   methods: {
     logout() {
-      this.$store.dispatch("removeToken");
-      logout();
+      this.$store.dispatch('removeToken')
+      logout()
     },
   },
   mounted() {
     if (!this.$store.state.user) {
       getUserInfo()
         .then((res) => {
-          this.user = res;
-          this.$store.dispatch("storeUser", res);
+          this.user = res
+          this.$store.dispatch('storeUser', res)
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
     } else {
-      this.user = this.$store.state.user;
-      this.loading = false;
+      this.user = this.$store.state.user
+      this.loading = false
     }
     if (!this.$store.state.recentActivities) {
-      const now = new Date();
+      const now = new Date()
       const utcMilllisecondsSinceEpoch =
-        now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-      const utcSecondsSinceEpoch = Math.round(
-        utcMilllisecondsSinceEpoch / 1000
-      );
+        now.getTime() + now.getTimezoneOffset() * 60 * 1000
+      const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
       getActivities(1, utcSecondsSinceEpoch, 5)
         .then((res) => {
-          this.recentActivities = res;
-          this.$store.dispatch("storeRecentActivities", res);
-          this.loading = false;
+          this.recentActivities = res
+          this.$store.dispatch('storeRecentActivities', res)
+          this.loading = false
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
     } else {
-      this.recentActivities = this.$store.state.recentActivities;
-      this.loading = false;
+      this.recentActivities = this.$store.state.recentActivities
+      this.loading = false
     }
   },
-};
+}
 </script>
 
 <style scoped>
@@ -144,8 +142,7 @@ h2 {
   h1 {
     margin: 0;
     padding: 20px 0;
-    color: #000;
-    font-family: "Montserrat", sans-serif;
+    font-family: 'Montserrat', sans-serif;
   }
   button {
     background-color: #fc4c02;
@@ -179,8 +176,7 @@ h2 {
   h1 {
     margin: 0;
     padding: 20px 0;
-    color: black;
-    font-family: "Montserrat", sans-serif;
+    font-family: 'Montserrat', sans-serif;
   }
   button {
     background-color: #fc4c02;
@@ -198,7 +194,7 @@ h2 {
 }
 @media only screen and (max-width: 400px) {
   .profile-wrapper {
-    padding: 0 10px;
+    padding: 0 10px 50px 10px;
   }
   .profile-header {
     margin: 0 20px 30px 20px;

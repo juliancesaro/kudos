@@ -101,8 +101,8 @@ export default {
   padding: 10px;
   border-radius: 3px;
   background-color: white;
-  -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.06);
   margin-bottom: 30px;
 }
 .card-top {

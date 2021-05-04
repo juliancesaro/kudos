@@ -67,6 +67,9 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+  z-index: 1;
+}
 @media only screen and (min-width: 750px) {
   .navbar {
     position: absolute;
