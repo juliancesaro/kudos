@@ -1,6 +1,6 @@
 # kudos
 
-View your Strava activities on Google Maps as a heatmap and view your stats.
+Visualizing your Strava data.
 
 ## Project setup
 
