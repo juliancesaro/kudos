@@ -100,6 +100,9 @@ export default {
   max-width: 600px;
   margin: 0 auto;
 }
+img {
+  max-width: 130px;
+}
 .profile-header > p {
   margin-top: 0;
 }
