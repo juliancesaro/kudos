@@ -144,8 +144,7 @@ export default {
                 : null
             )
             this.loading = false
-            mapboxgl.accessToken =
-              'pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzhvNGEzOTA5d3Myb3FtZHV0N29weHIifQ.xt8T0KGhHNH1eqG-Vu-fuA'
+            mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN
             this.map = new mapboxgl.Map({
               container: 'map',
               style: 'mapbox://styles/mapbox/streets-v11',

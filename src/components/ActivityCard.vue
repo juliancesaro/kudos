@@ -14,8 +14,7 @@
         :src="
           `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/path-5+05445E-0.7(${encodeURIComponent(
             activity.map.summary_polyline
-          )})/auto/${cardWidth -
-            20}x250?access_token=pk.eyJ1IjoianVsaWFuY2VzYXJvIiwiYSI6ImNrbzhvNGEzOTA5d3Myb3FtZHV0N29weHIifQ.xt8T0KGhHNH1eqG-Vu-fuA`
+          )})/auto/${cardWidth - 20}x250?access_token=${mapboxAccessToken}`
         "
       />
     </div>
@@ -58,6 +57,7 @@ export default {
       cardWidth: null,
       city: '',
       state: '',
+      mapboxAccessToken: process.env.VUE_APP_MAPBOX_TOKEN,
     }
   },
   methods: {},
