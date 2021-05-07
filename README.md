@@ -1,6 +1,6 @@
-# kudos
+# Kudos
 
-> Visualizing your Strava data.
+Visualizing your Strava data.
 
 ## ⚙️ Project setup
 
