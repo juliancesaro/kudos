@@ -5,7 +5,7 @@ Visualizing your Strava data.
 ## ⚙️ Project setup
 
 1. Create a [Strava API Application](https://developers.strava.com/docs/getting-started/#account) and get the Client ID and Client Secret.
-2. Create a Google Could project, enable the Geocoding API, and [create an API Key](https://cloud.google.com/docs/authentication/api-keys#:~:text=To%20create%20an%20API%20key%3A,displays%20your%20newly%20created%20key.).
+2. Create a Google Could project, enable the Maps JavaScript and Geocoding API's, and [create an API Key](https://cloud.google.com/docs/authentication/api-keys#:~:text=To%20create%20an%20API%20key%3A,displays%20your%20newly%20created%20key.).
 3. Create a Mapbox account and [get your access token](https://docs.mapbox.com/help/glossary/access-token/).
 4. Create a .env file in the root of the project that looks like: 
 ```
