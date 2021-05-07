@@ -211,6 +211,7 @@ export default {
       })
     },
     fetchAllActivities(time) {
+      // Get all activities 200 at a time using pagination
       getActivities(this.page, time, 200)
         .then((res) => {
           this.allActivities = [...this.allActivities, ...res]
@@ -243,6 +244,7 @@ export default {
   },
   mounted() {
     if (!this.$store.state.allActivities) {
+      // Fetch activies before current time
       const now = new Date()
       const utcMilllisecondsSinceEpoch =
         now.getTime() + now.getTimezoneOffset() * 60 * 1000
@@ -260,6 +262,8 @@ export default {
 <style scoped>
 .stats-wrapper {
   height: 100%;
+  margin-left: 80px;
+  padding: 0 25px;
 }
 .stats {
   padding-top: 30px;
@@ -288,29 +292,20 @@ p {
 p:nth-child(2) {
   color: #fc4c02;
 }
-@media only screen and (min-width: 750px) {
-  .stats-wrapper {
-    margin-left: 80px;
-    padding: 0 25px;
-  }
-  .stats-list {
-    padding: 20px 0 20px 0;
-  }
+.stats-list {
+  padding: 20px 0 20px 0;
 }
+/* Mobile only CSS */
 @media only screen and (max-width: 750px) {
   .stats-wrapper {
     padding: 0 25px 50px 25px;
+    margin-left: 0;
   }
   h1 {
     font-size: 24px;
   }
   .stats-list {
-    padding: 20px 0 70px 0;
-  }
-}
-@media only screen and (max-width: 400px) {
-  .stats-wrapper {
-    padding: 0 25px 50px 25px;
+    padding-bottom: 70px;
   }
 }
 </style>

@@ -63,6 +63,8 @@ export default {
   },
   methods: {
     save() {
+      // Get number of activities and selected date as epoch and
+      // emit data back to MapView.vue
       const date = new Date(this.beforeDate)
       const utcMilllisecondsSinceEpoch =
         date.getTime() + date.getTimezoneOffset() * 60 * 1000
@@ -106,6 +108,10 @@ h2 {
   font-size: 18px;
   margin-bottom: 30px;
 }
+.num-activities {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
 .num-input {
   border: 1px solid lightgray;
   border-radius: 3px;
@@ -114,26 +120,24 @@ h2 {
 .warning {
   font-size: 14px;
 }
+.before-date {
+  font-size: 16px;
+}
 .date-input {
   border-radius: 3px;
   border: 1px solid lightgray;
   background-color: #f5f5f5;
 }
-.num-activities {
-  font-size: 16px;
-  margin-bottom: 15px;
-}
-.before-date {
-  font-size: 16px;
-}
-.save-btn {
-  margin-top: 25px;
+button {
   width: 100%;
   font-weight: 600;
   height: 30px;
   border-radius: 3px;
   border: none;
   color: white;
+}
+.save-btn {
+  margin-top: 25px;
 }
 .active {
   background-color: #fc4c02;
@@ -144,14 +148,9 @@ h2 {
 }
 .close-btn {
   margin-top: 10px;
-  width: 100%;
-  font-weight: 600;
-  height: 30px;
-  border-radius: 3px;
-  border: none;
   background-color: rgb(107, 107, 107);
-  color: white;
 }
+/* Mobile only CSS */
 @media only screen and (max-width: 500px) {
   .num-activities {
     font-size: 18px;

@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <img src="../assets/logo-copy.png" />
+    <img class="logo" src="../assets/logo.png" />
     <div class="links-wrapper">
       <router-link class="navlink" active-class="active" to="/"
         ><svg
@@ -57,6 +57,13 @@
           <line x1="4" y1="20" x2="18" y2="20" /></svg
       ></router-link>
     </div>
+    <a
+      class="github-logo"
+      href="https://github.com/juliancesaro/kudos"
+      target="_blank"
+    >
+      <img src="../assets/github_logo.png" />
+    </a>
   </div>
 </template>
 
@@ -70,70 +77,82 @@ export default {
 .navbar {
   z-index: 1;
 }
+.navbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #fc4c02;
+  display: flex;
+}
+.logo {
+  width: 40px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.links-wrapper {
+  display: flex;
+}
+.navlink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.github-logo {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+.github-logo > img {
+  width: 100%;
+}
+/* Desktop only CSS */
 @media only screen and (min-width: 750px) {
   .navbar {
-    position: absolute;
-    bottom: 0;
-    top: 0;
     width: 80px;
     height: 100%;
-    background-color: #fc4c02;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
   }
-  .navbar > img {
-    width: 40px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-  }
   .links-wrapper {
-    display: flex;
     flex-direction: column;
     justify-content: center;
   }
   .navlink {
     height: 70px;
-    width: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 80px;
   }
   .active {
-    width: 65px;
+    width: 75px;
     border-left: 5px solid #ffb89a;
   }
 }
+/* Mobile only CSS */
 @media only screen and (max-width: 750px) {
   .navbar {
-    position: absolute;
-    display: flex;
-    bottom: 0;
-    left: 0;
     width: 100%;
     height: 50px;
-    background-color: #fc4c02;
   }
-  .navbar > img {
+  .logo {
+    display: none;
+  }
+  .github-logo {
     display: none;
   }
   .links-wrapper {
     width: 100%;
-    display: flex;
   }
   .navlink {
     width: 50%;
     height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .active {
-    border-bottom: 5px solid #ffb89a;
     padding-top: 5px;
+    border-bottom: 5px solid #ffb89a;
   }
 }
 </style>

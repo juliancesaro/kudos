@@ -37,6 +37,8 @@ p {
   font-weight: 600;
 }
 p:nth-child(2) {
+  display: flex;
+  align-items: flex-end;
   color: #fc4c02;
 }
 .stat-text {
@@ -46,11 +48,7 @@ p:nth-child(2) {
 .stat-text > p {
   max-width: calc(50% - 5px);
 }
-@media only screen and (min-width: 750px) {
-  p {
-    font-size: 16px;
-  }
-}
+/* Mobile only CSS */
 @media only screen and (max-width: 750px) {
   p {
     font-size: 14px;

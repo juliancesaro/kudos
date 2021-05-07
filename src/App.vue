@@ -50,6 +50,9 @@ body,
   margin: 0;
   overflow-x: hidden;
 }
+body {
+  min-width: 300px;
+}
 #app {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;

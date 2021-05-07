@@ -12,21 +12,35 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   methods: {
     login() {
-      const { VUE_APP_CLIENT_ID } = process.env;
+      const { VUE_APP_CLIENT_ID } = process.env
       const redirectUrl =
-        process.env.NODE_ENV === "production"
-          ? "https://kudos-web.herokuapp.com"
-          : "http://localhost:8080";
-      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`;
+        process.env.NODE_ENV === 'production'
+          ? 'https://kudos-web.herokuapp.com'
+          : 'http://localhost:8080'
+      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`
     },
   },
-};
+}
 </script>
 
 <style scoped>
+h1 {
+  font-size: 38px;
+  margin: 0 0 5px 0;
+  color: #fc4c02;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+}
+button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: #efefef;
+  margin-bottom: 70px;
+}
 .login {
   height: 100%;
   min-width: 220px;
@@ -46,23 +60,9 @@ export default {
   width: 50%;
   max-width: 200px;
 }
-h1 {
-  font-size: 38px;
-  margin: 0 0 5px 0;
-  color: #fc4c02;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 900;
-}
 .desc {
   margin-bottom: 20px;
   width: 250px;
   font-weight: 500;
-}
-button {
-  padding: 0;
-  margin: 0;
-  border: none;
-  background-color: #efefef;
-  margin-bottom: 70px;
 }
 </style>

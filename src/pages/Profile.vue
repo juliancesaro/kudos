@@ -92,6 +92,32 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  margin: 0;
+  padding: 20px 0;
+}
+h2 {
+  margin: 0 auto 30px auto;
+  font-size: 20px;
+  font-weight: 500;
+}
+img {
+  max-width: 130px;
+  margin-top: 30px;
+  border-radius: 50%;
+  -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+  box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
+}
+button {
+  background-color: #fc4c02;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-weight: 500;
+  padding: 10px 30px;
+  display: block;
+  margin: 10px auto;
+}
 .profile-wrapper {
   height: 100%;
   min-width: 220px;
@@ -99,9 +125,6 @@ export default {
 .profile-header {
   max-width: 600px;
   margin: 0 auto;
-}
-img {
-  max-width: 130px;
 }
 .profile-header > p {
   margin-top: 0;
@@ -123,11 +146,7 @@ img {
   color: rgb(70, 70, 70);
   margin-top: 5px;
 }
-h2 {
-  margin: 0 auto 30px auto;
-  font-size: 20px;
-  font-weight: 500;
-}
+/* Desktop only CSS */
 @media only screen and (min-width: 750px) {
   .profile-wrapper {
     margin-left: 80px;
@@ -136,33 +155,13 @@ h2 {
   .profile-header {
     margin: 0 auto 30px auto;
   }
-  img {
-    margin-top: 30px;
-    border-radius: 50%;
-    -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-    box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-  }
-  h1 {
-    margin: 0;
-    padding: 20px 0;
-    font-family: 'Montserrat', sans-serif;
-  }
-  button {
-    background-color: #fc4c02;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    font-weight: 500;
-    padding: 10px 30px;
-    display: block;
-    margin: 10px auto;
-  }
   .profile-recent {
     padding-bottom: 50px;
     max-width: 600px;
     margin: 0 auto;
   }
 }
+/* Mobile only CSS */
 @media only screen and (max-width: 750px) {
   .profile-wrapper {
     padding: 0 10px 50px 10px;
@@ -170,31 +169,11 @@ h2 {
   .profile-header {
     margin: 0 40px 30px 40px;
   }
-  img {
-    margin-top: 30px;
-    border-radius: 50%;
-    -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-    box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-  }
-  h1 {
-    margin: 0;
-    padding: 20px 0;
-    font-family: 'Montserrat', sans-serif;
-  }
-  button {
-    background-color: #fc4c02;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    font-weight: 600;
-    padding: 10px 30px;
-    display: block;
-    margin: 10px auto 0 auto;
-  }
   .profile-recent {
     padding-bottom: 70px;
   }
 }
+/* Small mobile only CSS */
 @media only screen and (max-width: 400px) {
   .profile-wrapper {
     padding: 0 10px 50px 10px;

@@ -78,6 +78,7 @@ export default {
       this.modalOpen = true
     },
     closeModal(mapData) {
+      // Reset map data and replace with emitted data
       if (mapData) {
         this.polylineArray = []
         this.latLngArray = []
@@ -89,7 +90,7 @@ export default {
       this.modalOpen = false
     },
     addMarker(name, i) {
-      // Create the markers.
+      // Create the markers
       let position = [
         this.polylineArray[i].startCoords.lat,
         this.polylineArray[i].startCoords.lng,
@@ -135,6 +136,7 @@ export default {
       this.loading = true
       let beforeDate = this.$store.state.mapData.beforeDate
       let numActivities = this.$store.state.mapData.numActivities
+      // Fetch activities then initialize new map object
       getActivities(1, beforeDate, numActivities)
         .then((res) => {
           try {
@@ -158,6 +160,7 @@ export default {
             )
           }
           if (res) this.$store.dispatch('storeActivities', res)
+          // When the map loads, process the activity data
           this.map.on(
             'load',
             function() {
@@ -168,11 +171,14 @@ export default {
         .catch((error) => console.log(error))
     },
     buildPathArray(activities) {
+      // Build polyline array and array of lats and longs for
+      // each activity
       activities.forEach((activity, i) => {
         activity.map.summary_polyline
           ? this.buildPath(activity.map.summary_polyline, i)
           : null
       })
+      // Initialize and the heatmap
       let heatMapData = { type: 'FeatureCollection', features: [] }
       this.latLngArray.forEach((coord) => {
         heatMapData.features.push({
@@ -187,6 +193,8 @@ export default {
       this.mapView === 'heat' ? this.addHeatMap() : this.buildRouteMap()
     },
     buildPath(polyline, i) {
+      // Decode activity polyline and add it to both the polyline array
+      // for the routemap and the lat long array for the heatmap
       let latLngArr = []
       let geoJSON = polylineUtil.toGeoJSON(polyline)
       this.map.addSource('route-' + i, {
@@ -227,6 +235,7 @@ export default {
       this.latLngArray = [...this.latLngArray, ...latLngArr]
     },
     buildRouteMap() {
+      // Add each marker and each polyline
       this.activityNames.forEach((name, i) => {
         this.addMarker(name, i)
       })
@@ -235,6 +244,7 @@ export default {
       }
     },
     addHeatMap() {
+      // Add the heatmap
       this.map.addLayer({
         id: 'heatmap',
         type: 'heatmap',
@@ -262,6 +272,7 @@ export default {
 </script>
 
 <style>
+/* Global styles for Mapbox markers */
 .marker {
   width: 30px;
   height: 80px;
@@ -285,12 +296,14 @@ export default {
   padding: 10px 20px;
 }
 </style>
+
 <style scoped>
 .mapview-wrapper {
   height: 100%;
 }
 .map-nav {
   display: flex;
+  width: 100%;
 }
 .map-nav-buttons-wrapper {
   display: flex;
@@ -313,6 +326,7 @@ export default {
 }
 .map {
   margin: 0 auto;
+  width: 100%;
 }
 .settings {
   display: flex;
@@ -324,6 +338,10 @@ export default {
   border: none;
   background-color: #efefef;
 }
+.loading-wrapper {
+  position: absolute;
+}
+/* Desktop only CSS */
 @media only screen and (min-width: 751px) {
   .mapview-wrapper {
     height: 100%;
@@ -334,64 +352,36 @@ export default {
     align-items: center;
   }
   .map-nav {
-    width: 100%;
     margin: 0 auto;
   }
   .map-nav-buttons {
     flex: 9;
     margin: 0 auto;
-    width: 100%;
-
     max-width: 600px;
   }
   .switcher {
     flex: 1;
-    width: 50%;
-    height: 40px;
-    border: none;
-    font-weight: 500;
-    background-color: #efefef;
   }
   .map {
     height: 100%;
-    width: 100%;
   }
   .loading-wrapper {
-    position: absolute;
     top: 0;
     left: 80px;
     height: 100%;
     width: calc(100% - 80px);
   }
 }
+/* Mobile only CSS */
 @media only screen and (max-width: 750px) {
-  .map-nav {
-    width: 100%;
-  }
   .map {
     height: calc(100% - 90px);
-    width: 100%;
   }
   .loading-wrapper {
-    position: absolute;
     top: 40px;
     left: 0;
     height: calc(100% - 90px);
     width: 100%;
   }
-}
-h1 {
-  margin: 0;
-  color: #fc4c02;
-  font-family: 'Montserrat', sans-serif;
-}
-img {
-  border-radius: 50%;
-  -webkit-box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-  box-shadow: 0px 8px 24px rgb(13 13 18 / 16%);
-}
-button {
-  display: block;
-  margin: 0 auto;
 }
 </style>
