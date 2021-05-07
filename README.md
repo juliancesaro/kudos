@@ -36,7 +36,7 @@ heroku config:set VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
 
 ### Deploy app to Heroku
 ```
-git push heroku main
+git push heroku master
 ```
 
 ## 💻 Technologies and API's
