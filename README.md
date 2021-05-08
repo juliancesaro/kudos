@@ -36,6 +36,12 @@ heroku config:set VUE_APP_CLIENT_SECRET=YOUR_CLIENT_SECRET
 heroku config:set VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
 ```
 
+### Configure redirect URI
+
+```
+In Login.vue, change https://kudos-web.herokuapp.com -> https://your-app-name.herokuapp.com
+```
+
 ### Deploy app to Heroku
 
 ```
