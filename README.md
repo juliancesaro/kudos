@@ -30,7 +30,7 @@ heroku create your-app-name
 
 ### Set Heroku config variables
 
-```
+```JavaScript
 heroku config:set VUE_APP_CLIENT_ID=YOUR_CLIENT_ID
 heroku config:set VUE_APP_CLIENT_SECRET=YOUR_CLIENT_SECRET
 heroku config:set VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
