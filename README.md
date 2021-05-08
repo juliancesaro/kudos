@@ -17,7 +17,7 @@ Visualizing your Strava data.
 4. `npm install`
 5. `npm run serve`
 
-Don't forget to restrict your keys and tokens!
+Don't forget to restrict your Mapbox token!
 
 ## 🚀 Project deployment
 
