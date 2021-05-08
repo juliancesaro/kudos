@@ -52,12 +52,14 @@ export const getAccessToken = async () => {
   let token = getAuthTokenFromUrl()
   const localTokenExpiry = getLocalTokenExpiry()
 
+  // If token has expired, refresh token
   if (localTokenExpiry && Number(localTokenExpiry * 1000) - Date.now() <= 0) {
     refreshAccessToken()
   }
 
   const localAccessToken = getLocalAccessToken()
 
+  // If no token, but we are in the redirect URI, get new access token
   if (!localAccessToken && token) {
     try {
       const authReponse = await axios.post(
@@ -138,6 +140,19 @@ export const getUserStats = async (id) => {
       `https://www.strava.com/api/v3/athletes/${id}/stats`
     )
     return userStatsResponse.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const reverseGeocode = async (lat, lng) => {
+  try {
+    const geocodeResponse = await axios.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        lng + ',' + lat
+      )}.json?access_token=${process.env.VUE_APP_MAPBOX_TOKEN}`
+    )
+    return geocodeResponse.data
   } catch (error) {
     console.log(error)
   }

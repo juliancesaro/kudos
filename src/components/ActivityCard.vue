@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { reverseGeocode } from '../services'
+
 export default {
   name: 'Activity Card',
   props: {
@@ -61,44 +63,38 @@ export default {
     }
   },
   methods: {
-    getLocation(geocoder, latlng) {
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            // Use suburb if it exists, else use city, and use state
-            // if it exists, else use country
-            let suburb = results[0].address_components.filter((comps) =>
-              comps.types.includes('locality')
-            )
-            suburb.length > 0 ? (suburb = suburb[0].long_name) : null
-            let city = results[0].address_components.filter((comps) =>
-              comps.types.includes('administrative_area_level_2')
-            )
-            city.length > 0 ? (city = city[0].long_name) : null
-            let state = results[0].address_components.filter((comps) =>
-              comps.types.includes('administrative_area_level_1')
-            )
-            state.length > 0 ? (state = state[0].long_name) : null
-            let country = results[0].address_components.filter((comps) =>
-              comps.types.includes('country')
-            )
-            country.length > 0 ? (country = country[0].long_name) : null
-            this.city = suburb ? suburb : city
-            this.state = state ? state : country
-          }
+    async getLocation(lat, lng) {
+      let geocode = await reverseGeocode(lat, lng)
+      // Use suburb if it exists, else use city, and use state
+      // if it exists, else use country
+      let locality = null
+      let region = null
+      geocode.features.forEach((feature) => {
+        if (feature.id.includes('locality')) {
+          locality = feature.place_name
+        }
+        if (feature.id.includes('region')) {
+          region = feature.place_name
         }
       })
+      if (locality) {
+        let names = locality.split(', ')
+        this.city = names[0]
+        this.state = names[1]
+      } else if (region) {
+        let names = region.split(', ')
+        this.city = names[0]
+        this.state = names[1]
+      }
     },
   },
   mounted() {
     // Get card ref width to fetch static map image of correct size
     this.cardWidth = this.$refs.card.clientWidth
-    const geocoder = new window.google.maps.Geocoder()
-    const latlng = {
-      lat: this.activity.start_latlng[0],
-      lng: this.activity.start_latlng[1],
-    }
-    this.getLocation(geocoder, latlng)
+    this.getLocation(
+      this.activity.start_latlng[0],
+      this.activity.start_latlng[1]
+    )
   },
 }
 </script>
