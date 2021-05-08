@@ -1,6 +1,7 @@
-# Kudos
-
-Visualizing your Strava data.
+<div align="center">
+  <h1>🏃🗺️<br>Kudos</h1>
+  <h3>Visualizing your Strava data</h3>
+</div>
 
 ## ⚙️ Project setup
 
