@@ -11,21 +11,21 @@
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "axios": "^0.21.1",
-    "core-js": "^3.6.5",
+    "core-js": "^3.15.2",
     "express": "*",
-    "mapbox-gl": "^2.2.0",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.6",
-    "vuex": "^4.0.0"
+    "mapbox-gl": "^2.3.1",
+    "vue": "^3.1.4",
+    "vue-router": "^4.0.10",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
+    "@vue/compiler-sfc": "^3.1.4",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
+    "eslint-plugin-vue": "^7.13.0",
     "express": "^4.17.1",
     "serve-static": "^1.14.1"
   },
