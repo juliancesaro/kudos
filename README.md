@@ -22,30 +22,18 @@ Don't forget to restrict your Mapbox token!
 
 ## 🚀 Project deployment
 
-### Create a new Heroku app
-
-```
-heroku create your-app-name
-```
-
-### Set Heroku config variables
+### Set config variables
 
 ```JavaScript
-heroku config:set VUE_APP_CLIENT_ID=YOUR_CLIENT_ID
-heroku config:set VUE_APP_CLIENT_SECRET=YOUR_CLIENT_SECRET
-heroku config:set VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
+VUE_APP_CLIENT_ID=YOUR_CLIENT_ID
+VUE_APP_CLIENT_SECRET=YOUR_CLIENT_SECRET
+VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
 ```
 
 ### Configure redirect URI
 
 ```
-In Login.vue, change https://kudos-web.herokuapp.com -> https://your-app-name.herokuapp.com
-```
-
-### Deploy app to Heroku
-
-```
-git push heroku master
+In Login.vue, change https://kudos-web.netlify.app -> https://your-app-name.com
 ```
 
 ## 💻 Technologies and API's

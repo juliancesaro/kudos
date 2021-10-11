@@ -12,18 +12,18 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: "Login",
   methods: {
     login() {
-      const { VUE_APP_CLIENT_ID } = process.env
+      const { VUE_APP_CLIENT_ID } = process.env;
       const redirectUrl =
-        process.env.NODE_ENV === 'production'
-          ? 'https://kudos-web.herokuapp.com'
-          : 'http://localhost:8080'
-      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`
+        process.env.NODE_ENV === "production"
+          ? "https://kudos-web.netlify.app"
+          : "http://localhost:8080";
+      window.location = `http://www.strava.com/oauth/authorize?client_id=${VUE_APP_CLIENT_ID}&response_type=code&redirect_uri=${redirectUrl}/exchange_token&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all`;
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -31,7 +31,7 @@ h1 {
   font-size: 38px;
   margin: 0 0 5px 0;
   color: #fc4c02;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 900;
 }
 button {
