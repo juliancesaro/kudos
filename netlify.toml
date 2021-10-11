@@ -1,4 +1,6 @@
-# A basic redirect rule
+[build]
+  publish = "build"
 [[redirects]]
-  from = "/exchange_token?state=&code=:code&scope=read,activity:read,activity:read_all,profile:read_all"
-  to = "/"
+  from = "/*"
+  to = "/index.html"
+  status = 200
