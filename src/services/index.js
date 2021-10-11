@@ -83,7 +83,7 @@ export const getAccessToken = async () => {
       setLocalTokenExpiry(responseData.expires_at);
       window.location =
         process.env.NODE_ENV === "production"
-          ? "https://kudos-web.netlify.app/"
+          ? "https://www.kudos-web.app/"
           : `http://localhost:8080/`;
       return responseData.access_token;
     } catch (error) {
@@ -101,7 +101,7 @@ export const logout = () => {
   removeLocalTokenExpiry();
   window.location =
     process.env.NODE_ENV === "production"
-      ? "https://kudos-web.netlify.app"
+      ? "https://www.kudos-web.app"
       : `http://localhost:8080`;
 };
 

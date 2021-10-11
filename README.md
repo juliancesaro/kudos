@@ -33,7 +33,7 @@ VUE_APP_MAPBOX_TOKEN=YOUR_MAPBOX_TOKEN
 ### Configure redirect URI
 
 ```
-In Login.vue, change https://kudos-web.netlify.app -> https://your-app-name.com
+In Login.vue, change https://www.kudos-web.app -> https://your-app.name
 ```
 
 ## 💻 Technologies and API's
