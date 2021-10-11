@@ -1,0 +1,4 @@
+# A basic redirect rule
+[[redirects]]
+  from = "/exchange_token?state=&code=:code&scope=read,activity:read,activity:read_all,profile:read_all"
+  to = "/"
