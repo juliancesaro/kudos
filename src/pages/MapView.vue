@@ -97,7 +97,6 @@ export default {
       this.loading = true;
       // Fetch activities then initialize new map object
       const activities = this.$store.state.allActivities;
-      console.log(activities);
       try {
         activities.forEach((activity) =>
           activity.map.summary_polyline
