@@ -17,46 +17,24 @@
           </button>
         </div>
       </div>
-      <button class="settings" @click="openModal()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="icon icon-tabler icon-tabler-settings"
-          width="30"
-          height="30"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="#555"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"
-          />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
-      </button>
     </div>
     <div id="map" class="map" ref="map"></div>
     <div v-if="loading" class="loading-wrapper">
       <loader />
     </div>
   </div>
-  <modal :open="modalOpen" @closeModal="closeModal" />
 </template>
 
 <script>
-import { logout, getActivities } from '../services'
-import polylineUtil from '@mapbox/polyline'
-import Modal from '../components/Modal.vue'
-import Loader from '../components/Loader.vue'
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js'
+import { logout, getAllActivities } from "../services";
+import { getCurrentTime } from "../utils";
+import polylineUtil from "@mapbox/polyline";
+import Loader from "../components/Loader.vue";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 
 export default {
-  name: 'MapView',
+  name: "MapView",
   components: {
-    Modal,
     Loader,
   },
   data() {
@@ -67,108 +45,87 @@ export default {
       polylineArray: [],
       markersArray: [],
       heatmap: null,
-      mapView: 'heat',
-      modalOpen: null,
-      firstModal: null,
+      mapView: "heat",
       loading: false,
-    }
+    };
   },
   methods: {
-    openModal() {
-      this.modalOpen = true
-    },
-    closeModal(mapData) {
-      // Reset map data and replace with emitted data
-      if (mapData) {
-        this.polylineArray = []
-        this.latLngArray = []
-        this.activityNames = []
-        this.markersArray = []
-        this.$store.dispatch('storeMapData', mapData)
-        this.loadMap()
-      }
-      this.modalOpen = false
-    },
     addMarker(name, i) {
       // Create the markers
       let position = [
         this.polylineArray[i].startCoords.lat,
         this.polylineArray[i].startCoords.lng,
-      ]
-      var el = document.createElement('div')
-      var img = document.createElement('div')
-      el.className = 'marker'
-      el.appendChild(img)
+      ];
+      var el = document.createElement("div");
+      var img = document.createElement("div");
+      el.className = "marker";
+      el.appendChild(img);
       let marker = new mapboxgl.Marker(el)
         .setLngLat(position)
         .setPopup(
           new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML('<h3 style="margin: 0;">' + name + '</h3>')
+            .setHTML('<h3 style="margin: 0;">' + name + "</h3>")
         )
-        .addTo(this.map)
-      this.markersArray.push(marker)
+        .addTo(this.map);
+      this.markersArray.push(marker);
     },
     toggleMapView(view) {
-      if (view === 'route') {
-        if (this.mapView === 'heat') {
-          this.mapView = 'route'
-          this.map.removeLayer('heatmap')
-          this.buildRouteMap()
+      if (view === "route") {
+        if (this.mapView === "heat") {
+          this.mapView = "route";
+          this.map.removeLayer("heatmap");
+          this.buildRouteMap();
         }
       } else {
-        if (this.mapView === 'route') {
-          this.mapView = 'heat'
+        if (this.mapView === "route") {
+          this.mapView = "heat";
           for (let i = 0; i < this.polylineArray.length; i++) {
-            this.polylineArray[i].removePoly()
+            this.polylineArray[i].removePoly();
           }
           for (let i = 0; i < this.markersArray.length; i++) {
-            this.markersArray[i].remove()
+            this.markersArray[i].remove();
           }
-          this.addHeatMap()
+          this.addHeatMap();
         }
       }
     },
     logout() {
-      this.$store.dispatch('removeToken')
-      logout()
+      this.$store.dispatch("removeToken");
+      logout();
     },
     loadMap() {
-      this.loading = true
-      let beforeDate = this.$store.state.mapData.beforeDate
-      let numActivities = this.$store.state.mapData.numActivities
+      this.loading = true;
       // Fetch activities then initialize new map object
-      getActivities(1, beforeDate, numActivities)
-        .then((res) => {
-          try {
-            res.forEach((activity) =>
-              activity.map.summary_polyline
-                ? this.activityNames.push(activity.name)
-                : null
-            )
-            this.loading = false
-            mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN
-            this.map = new mapboxgl.Map({
-              container: 'map',
-              style: 'mapbox://styles/mapbox/streets-v11',
-              center: [res[0].start_latlng[1], res[0].start_latlng[0]],
-              zoom: 10,
-            })
-          } catch (e) {
-            console.log(e)
-            alert(
-              'There was an error loading Mapbox, please refresh your page.'
-            )
-          }
-          if (res) this.$store.dispatch('storeActivities', res)
-          // When the map loads, process the activity data
-          this.map.on(
-            'load',
-            function() {
-              this.buildPathArray(res)
-            }.bind(this)
-          )
-        })
-        .catch((error) => console.log(error))
+      const activities = this.$store.state.allActivities;
+      try {
+        activities.forEach((activity) =>
+          activity.map.summary_polyline
+            ? this.activityNames.push(activity.name)
+            : null
+        );
+        this.loading = false;
+        mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
+        this.map = new mapboxgl.Map({
+          container: "map",
+          style: "mapbox://styles/mapbox/streets-v11",
+          center: [
+            activities[0].start_latlng[1],
+            activities[0].start_latlng[0],
+          ],
+          zoom: 10,
+        });
+      } catch (e) {
+        console.log(e);
+        alert("There was an error loading Mapbox, please refresh your page.");
+      }
+      if (activities) this.$store.dispatch("storeActivities", activities);
+      // When the map loads, process the activity data
+      this.map.on(
+        "load",
+        function() {
+          this.buildPathArray(activities);
+        }.bind(this)
+      );
     },
     buildPathArray(activities) {
       // Build polyline array and array of lats and longs for
@@ -176,99 +133,102 @@ export default {
       activities.forEach((activity, i) => {
         activity.map.summary_polyline
           ? this.buildPath(activity.map.summary_polyline, i)
-          : null
-      })
+          : null;
+      });
       // Initialize and the heatmap
-      let heatMapData = { type: 'FeatureCollection', features: [] }
+      let heatMapData = { type: "FeatureCollection", features: [] };
       this.latLngArray.forEach((coord) => {
         heatMapData.features.push({
-          type: 'Feature',
-          geometry: { type: 'Point', coordinates: coord },
-        })
-      })
-      this.map.addSource('heatmap', {
-        type: 'geojson',
+          type: "Feature",
+          geometry: { type: "Point", coordinates: coord },
+        });
+      });
+      this.map.addSource("heatmap", {
+        type: "geojson",
         data: heatMapData,
-      })
-      this.mapView === 'heat' ? this.addHeatMap() : this.buildRouteMap()
+      });
+      this.mapView === "heat" ? this.addHeatMap() : this.buildRouteMap();
     },
     buildPath(polyline, i) {
       // Decode activity polyline and add it to both the polyline array
       // for the routemap and the lat long array for the heatmap
-      let latLngArr = []
-      let geoJSON = polylineUtil.toGeoJSON(polyline)
-      this.map.addSource('route-' + i, {
-        type: 'geojson',
+      let latLngArr = [];
+      let geoJSON = polylineUtil.toGeoJSON(polyline);
+      this.map.addSource("route-" + i, {
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: geoJSON,
         },
-      })
+      });
       this.polylineArray.push({
         setPoly: () => {
           this.map.addLayer({
-            id: 'route-' + i,
-            type: 'line',
-            source: 'route-' + i,
+            id: "route-" + i,
+            type: "line",
+            source: "route-" + i,
             layout: {
-              'line-join': 'round',
-              'line-cap': 'round',
+              "line-join": "round",
+              "line-cap": "round",
             },
             paint: {
-              'line-color': '#000000'.replace(/0/g, function() {
-                return (~~(Math.random() * 16)).toString(16)
+              "line-color": "#000000".replace(/0/g, function() {
+                return (~~(Math.random() * 16)).toString(16);
               }),
-              'line-width': 5,
+              "line-width": 5,
             },
-          })
+          });
         },
-        removePoly: () => this.map.removeLayer('route-' + i),
+        removePoly: () => this.map.removeLayer("route-" + i),
         startCoords: {
           lat: geoJSON.coordinates[0][0],
           lng: geoJSON.coordinates[0][1],
         },
-      })
+      });
       geoJSON.coordinates.forEach((coords) => {
-        latLngArr.push([coords[0], coords[1]])
-      })
-      this.latLngArray = [...this.latLngArray, ...latLngArr]
+        latLngArr.push([coords[0], coords[1]]);
+      });
+      this.latLngArray = [...this.latLngArray, ...latLngArr];
     },
     buildRouteMap() {
       // Add each marker and each polyline
       this.activityNames.forEach((name, i) => {
-        this.addMarker(name, i)
-      })
+        this.addMarker(name, i);
+      });
       for (let i = 0; i < this.polylineArray.length; i++) {
-        this.polylineArray[i].setPoly()
+        this.polylineArray[i].setPoly();
       }
     },
     addHeatMap() {
       // Add the heatmap
       this.map.addLayer({
-        id: 'heatmap',
-        type: 'heatmap',
-        source: 'heatmap',
+        id: "heatmap",
+        type: "heatmap",
+        source: "heatmap",
         paint: {
-          'heatmap-intensity': {
+          "heatmap-intensity": {
             stops: [
               [11, 0.1],
               [15, 0.1],
             ],
           },
-          'heatmap-radius': 8,
+          "heatmap-radius": 8,
         },
-      })
+      });
     },
   },
-  mounted() {
-    if (!this.$store.state.mapData) {
-      this.openModal()
+  async mounted() {
+    if (!this.$store.state.allActivities) {
+      this.loading = true;
+      const allActivities = await getAllActivities(getCurrentTime());
+      this.$store.dispatch("storeAllActivities", allActivities);
+      this.loadMap();
     } else {
-      this.loadMap()
+      this.loadMap();
     }
   },
-}
+};
 </script>
 
 <style>
@@ -281,7 +241,7 @@ export default {
   cursor: pointer;
 }
 .marker > div {
-  background-image: url('../assets/marker.png');
+  background-image: url("../assets/marker.png");
   background-size: cover;
   width: 30px;
   height: 40px;
@@ -292,7 +252,7 @@ export default {
 }
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   padding: 10px 20px;
 }
 </style>

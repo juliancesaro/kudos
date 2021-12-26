@@ -134,6 +134,28 @@ export const getActivities = async (page, beforeDate, num) => {
   }
 };
 
+export const getAllActivities = async (time) => {
+  let allActivities = [];
+  let page = 1;
+  const fetchMaxActivities = async () => {
+    // Get all activities 200 at a time using pagination
+    try {
+      const activities = await getActivities(page, time, 200);
+      allActivities = [...allActivities, ...activities];
+      if (activities.length < 200) {
+        return;
+      } else {
+        page++;
+        fetchMaxActivities();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  await fetchMaxActivities();
+  return allActivities;
+};
+
 export const getUserStats = async (id) => {
   try {
     const userStatsResponse = await axios.get(

@@ -10,11 +10,11 @@
 
 <script>
 export default {
-  name: 'StatCard',
+  name: "StatCard",
   props: {
     stat: Object,
   },
-}
+};
 </script>
 
 <style scoped>

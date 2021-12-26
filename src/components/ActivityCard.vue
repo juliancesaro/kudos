@@ -2,9 +2,9 @@
   <div ref="card" class="activity-card-wrapper">
     <div class="card-top">
       <p class="date">
-        {{ new Date(activity.start_date_local).toLocaleDateString('en-AU') }}
+        {{ new Date(activity.start_date_local).toLocaleDateString("en-AU") }}
       </p>
-      <p class="location">{{ city + ', ' + state }}</p>
+      <p class="location">{{ city + ", " + state }}</p>
     </div>
     <p class="activity-name">{{ activity.name }}</p>
     <div v-if="activity.map.summary_polyline" class="map-image-wrapper">
@@ -47,56 +47,56 @@
 </template>
 
 <script>
-import { reverseGeocode } from '../services'
+import { reverseGeocode } from "../services";
 
 export default {
-  name: 'Activity Card',
+  name: "Activity Card",
   props: {
     activity: Object,
   },
   data() {
     return {
       cardWidth: null,
-      city: '',
-      state: '',
+      city: "",
+      state: "",
       mapboxAccessToken: process.env.VUE_APP_MAPBOX_TOKEN,
-    }
+    };
   },
   methods: {
     async getLocation(lat, lng) {
-      let geocode = await reverseGeocode(lat, lng)
+      let geocode = await reverseGeocode(lat, lng);
       // Use suburb if it exists, else use city, and use state
       // if it exists, else use country
-      let locality = null
-      let region = null
+      let locality = null;
+      let region = null;
       geocode.features.forEach((feature) => {
-        if (feature.id.includes('locality')) {
-          locality = feature.place_name
+        if (feature.id.includes("locality")) {
+          locality = feature.place_name;
         }
-        if (feature.id.includes('region')) {
-          region = feature.place_name
+        if (feature.id.includes("region")) {
+          region = feature.place_name;
         }
-      })
+      });
       if (locality) {
-        let names = locality.split(', ')
-        this.city = names[0]
-        this.state = names[1]
+        let names = locality.split(", ");
+        this.city = names[0];
+        this.state = names[1];
       } else if (region) {
-        let names = region.split(', ')
-        this.city = names[0]
-        this.state = names[1]
+        let names = region.split(", ");
+        this.city = names[0];
+        this.state = names[1];
       }
     },
   },
   mounted() {
     // Get card ref width to fetch static map image of correct size
-    this.cardWidth = this.$refs.card.clientWidth
+    this.cardWidth = this.$refs.card.clientWidth;
     this.getLocation(
       this.activity.start_latlng[0],
       this.activity.start_latlng[1]
-    )
+    );
   },
-}
+};
 </script>
 
 <style scoped>
