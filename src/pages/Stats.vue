@@ -248,10 +248,14 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     if (!this.$store.state.allActivities) {
-      const allActivities = getAllActivities(getCurrentTime());
+      const allActivities = await getAllActivities(getCurrentTime());
       this.$store.dispatch("storeAllActivities", allActivities);
+      this.allActivities = allActivities;
+      this.createStats();
+    } else if (!this.$store.state.userStats) {
+      this.allActivities = this.$store.state.allActivities;
       this.createStats();
     } else {
       this.allActivities = this.$store.state.allActivities;
